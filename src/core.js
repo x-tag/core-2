@@ -62,7 +62,7 @@
         types: {
           boolean: {
             set: function(prop, val){
-              val ? this.setAttribute(prop, '') : this.removeAttribute(prop);
+              val || val === '' ? this.setAttribute(prop, '') : this.removeAttribute(prop);
             },
             get: function(prop){
               return this.hasAttribute(prop);
