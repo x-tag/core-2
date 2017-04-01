@@ -31,14 +31,15 @@
     events: {
       tap: {
         attach: ['pointerdown', 'pointerup'],
-        onFilter: function(node, event, data){
+        onFilter (node, event, ref, resolve){
+          var data = ref.data;
           if (event.type == 'pointerdown') {
             data.startX = event.clientX;
             data.startY = event.clientY;
           }
-          else return (event.button === 0 &&
-                       Math.abs(data.startX - event.clientX) < 10 &&
-                       Math.abs(data.startY - event.clientY) < 10) || null;
+          else if (event.button === 0 &&
+                   Math.abs(data.startX - event.clientX) < 10 &&
+                   Math.abs(data.startY - event.clientY) < 10) resolve();
         }
       }
     },
@@ -69,7 +70,7 @@
             }
           }
         },
-        onParse: function(klass, prop, args, descriptor){
+        onParse (klass, prop, args, descriptor){
           klass.getOptions('attributes')[prop] = descriptor;
           var type = this.types[args[0]] || {};
           let descSet = descriptor.set;
@@ -90,15 +91,15 @@
           delete descriptor.value;
           delete descriptor.writable;
         },
-        onCompiled: function(klass, descriptors){
+        onCompiled (klass, descriptors){
           klass.observedAttributes = Object.keys(klass.getOptions('attributes')).concat(klass.observedAttributes || [])
         }
       },
       event: {
-        onParse: function(klass, property, args, descriptor){
+        onParse (klass, property, args, descriptor){
           return false;
         },
-        onConstruct: function(node, property, args, descriptor){
+        onConstruct (node, property, args, descriptor){
           xtag.addEvent(node, property, descriptor.value);
         }
       },
@@ -110,7 +111,7 @@
           get templates (){
             return this.constructor.getOptions('templates');
           }
-          render(name){
+          render (name){
             var _name = name || 'default';
             var template = this.templates[_name];
             if (template) {
@@ -120,22 +121,23 @@
             else throw new ReferenceError('Template "' + _name + '" is undefined');
           }
         },
-        onParse: function(klass, property, args, descriptor){
+        onParse (klass, property, args, descriptor){
           klass.getOptions('templates')[property || 'default'] = descriptor.value;
           return false;
         }
       }
     },
-    create: function(klass){
+    create (klass){
       processExtensions('onParse', klass); 
       return klass;
     },
-    register: function (name, klass) {
+    register (name, klass) {
       customElements.define(name, klass);
     },
-    addEvent: function(node, key, fn, capture){
-      var type;
+    addEvent (node, key, fn, capture){
+      var type;  
       var stack = fn;
+      var ref = { data: {}, capture: capture };
       var pseudos = node.constructor.getOptions('pseudos');
       key.replace(regexPseudoCapture, (match, name, pseudo1, args, pseudo2) => {
         if (name) type = name;
@@ -143,30 +145,34 @@
           var pseudo = pseudo1 || pseudo2,
               pseudo = pseudos[pseudo] || xtag.pseudos[pseudo];
           var _args = args ? args.split(regexCommaArgs) : [];
-          stack = pseudoWrap(pseudo, _args, stack);
-          if (pseudo.onParse) pseudo.onParse(node, type, _args, stack);
+          stack = pseudoWrap(pseudo, _args, stack, ref);
+          if (pseudo.onParse) pseudo.onParse(node, type, _args, stack, ref);
         }
-      })
+      });
       node.addEventListener(type, stack, capture);
-      var ref = { type: type, listener: stack, capture: capture, data: {} };
+      ref.type = type;
+      ref.listener = stack;
       var event = node.constructor.getOptions('events')[type] || xtag.events[type];
       if (event) {
         var listener = function(e){
-          var output = event.onFilter(this, e, ref.data);
-          if (!output) return output;
-          xtag.fireEvent(e.target, type);
+          new Promise((resolve, reject) => {
+            event.onFilter(this, e, ref, resolve, reject);
+          }).then(() => {
+            xtag.fireEvent(e.target, type);
+          });
         }
         ref.attached = event.attach.map(type => {
-          return xtag.addEvent(node, type, listener);
+          return xtag.addEvent(node, type, listener, true);
         });
+        if (event.onAttach) event.onAttach(node, ref);
       }
       return ref;
     },
-    removeEvent: function(node, ref){
+    removeEvent (node, ref){
       node.removeEventListener(ref.type, ref.listener, ref.capture);
       if (ref.attached) ref.attached.forEach(attached => { xtag.removeEvent(node, ref) })
     },
-    fireEvent: function(node, name, obj = {}){
+    fireEvent (node, name, obj = {}){
       obj.bubbles = !(obj.bubbles === false);
       obj.cancelable = !(obj.cancelable === false);
       node.dispatchEvent(new CustomEvent(name, obj));
@@ -224,9 +230,9 @@
 
   XTagElement = createClass();
 
-  function pseudoWrap(pseudo, args, fn){
+  function pseudoWrap(pseudo, args, fn, detail){
     return function(){
-      var _pseudo = { fn: fn, args: args };
+      var _pseudo = { fn: fn, args: args, detail: detail };
       var output = pseudo.onInvoke(this, _pseudo, ...arguments);
       if (output === null || output === false) return output;
       return _pseudo.fn.apply(this, output instanceof Array ? output : arguments);

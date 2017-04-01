@@ -45,6 +45,9 @@ describe("X-Tag's attr extension should", function() {
       get 'four::attr'(){ count++; }
       set 'five::attr'(val){ count++; }
       get 'five::attr'(){ count++; }
+      get 'six::attr'(){
+        return Number(this.getAttribute('six'));
+      }
     });
 
     defineTestElement(foo);
@@ -57,6 +60,7 @@ describe("X-Tag's attr extension should", function() {
     node.four;
     node.five = 'test';
     node.five;
+    node.six = 6;
 
     expect(count).toBe(7);
     expect(node.one).toBe('test');
@@ -69,6 +73,8 @@ describe("X-Tag's attr extension should", function() {
     expect(node.getAttribute('four')).toBe('test');
     expect(node.five).toBe('test');
     expect(node.getAttribute('five')).toBe('test');
+    expect(node.six).toBe(6);
+    expect(node.getAttribute('six')).toBe('6');
 
   });
 
@@ -77,7 +83,10 @@ describe("X-Tag's attr extension should", function() {
     var count = 0;
     var foo = xtag.create(class extends XTagElement {
       'one::attr(boolean)'(){ count++; }
-      set 'two::attr(boolean)'(val){ count++; }
+      set 'two::attr(boolean)'(val){
+        count++;
+        return 'bar';
+      }
       get 'three::attr(boolean)'(){ count++; }
     });
 
@@ -97,6 +106,43 @@ describe("X-Tag's attr extension should", function() {
     expect(node.hasAttribute('three')).toBe(true);
     expect(node.getAttribute('three')).toBe('');
 
+  });
+
+});
+
+describe("X-Tag's event extension should", function() {
+
+  it("attach all subevents", function(done) {
+    
+    var count = 0;
+    xtag.events.loaded = {
+      attach: ['load'],
+      onFilter (node, event, data, resolve) {
+        if (event.type == 'load') {
+          count++;
+          resolve();
+        }
+      }
+    }
+
+    var foo = xtag.create(class extends XTagElement {
+      constructor(){
+        super();
+        var img = document.createElement('img');
+        img.src = 'assets/bitcoin.png';
+        this.appendChild(img);
+      }
+      'loaded::event'(){
+        count++;
+        expect(count).toBe(2);
+        done();
+      }
+    });
+
+    defineTestElement(foo);
+
+    var node = new foo();
+    
   });
 
 });
