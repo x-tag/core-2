@@ -161,8 +161,8 @@
             xtag.fireEvent(e.target, type);
           });
         }
-        ref.attached = event.attach.map(type => {
-          return xtag.addEvent(node, type, listener, true);
+        ref.attached = event.attach.map(key => {
+          return xtag.addEvent(node, key, listener, true);
         });
         if (event.onAttach) event.onAttach(node, ref);
       }
