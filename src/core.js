@@ -206,7 +206,6 @@
         if (!exts[extension.name]) {
           if (typeof extension == 'string') {
             mixin = xtag.extensions[extension].mixin;
-            exts[extension] = xtag.extensions[extension];
           }
           else {
             mixin = extension.mixin;

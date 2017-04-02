@@ -1,9 +1,94 @@
 
-describe('X-Tag should', function() {
+describe("X-Tag's setup should", function() {
 
-  it("have its globals in scope", function() {
+  it("import its globals into the environment", function() {
     expect(xtag).toBeDefined();
     expect(XTagElement).toBeDefined();
+  });
+
+});
+
+describe("X-Tag extension API should", function() {
+
+  it("load global extensions when included in component declarations via string reference", function() {
+
+    count = 0;
+    xtag.extensions.foo = {
+      mixin: (base) => class extends base {
+        bar(){
+          count++;
+        }
+      },
+      onParse (){
+        count++;
+      },
+      onCompiled (){
+        count++;
+      },
+      onConstruct (){
+        count++;
+      }
+    }
+
+    var component = xtag.create(class extends XTagElement.extensions('foo') {
+      'baz::foo'(){ count++; }
+    });
+
+    defineTestElement(component);
+
+    var node = new component();
+    node.bar();
+    node.baz();
+
+    expect(count).toBe(5);
+
+    delete xtag.extensions.foo;
+  });
+
+  it("load local extensions when included in component declarations directly", function() {
+
+    count = 0;
+    var foo = {
+      name: 'foo',
+      mixin: (base) => class extends base {
+        bar(){
+          count++;
+        }
+      },
+      onParse (){
+        count++;
+      },
+      onCompiled (){
+        count++;
+      },
+      onConstruct (){
+        count++;
+      }
+    }
+
+    var baz = {
+      name: 'baz',
+      mixin: (base) => class extends base {
+        boo(){
+          count++;
+        }
+      }
+    }
+
+    var _comp = class extends XTagElement.extensions(foo, baz) {
+      'zul::foo'(){ count++; }
+    }
+
+    var component = xtag.create(_comp);
+
+    defineTestElement(component);
+
+    var node = new component();
+    node.bar();
+    node.zul();
+    node.boo();
+    
+    expect(count).toBe(6);
   });
 
 });
