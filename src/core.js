@@ -217,7 +217,7 @@
           }
         }
         return extended;
-      }, klass);
+      }, this);
     }
 
     klass.as = function(tag){
