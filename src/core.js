@@ -164,12 +164,14 @@
         ref.attached = event.attach.map(key => {
           return xtag.addEvent(node, key, listener, true);
         });
-        if (event.onAttach) event.onAttach(node, ref);
+        if (event.onAdd) event.onAdd(node, ref);
       }
       return ref;
     },
     removeEvent (node, ref){
       node.removeEventListener(ref.type, ref.listener, ref.capture);
+      var event = node.constructor.getOptions('events')[ref.type] || xtag.events[ref.type];
+      if (event && event.onRemove) event.onRemove(node, ref);
       if (ref.attached) ref.attached.forEach(attached => { xtag.removeEvent(node, ref) })
     },
     fireEvent (node, name, obj = {}){
