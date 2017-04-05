@@ -98,31 +98,31 @@ describe("X-Tag's attr extension should", function() {
   it("correctly parse keys and set descriptors", function() {
 
     var count = 0;
-    var foo = xtag.create(class extends XTagElement {
+    var component = xtag.create(class extends XTagElement {
       'one::attr'(){ count++; }
       set 'two::attr'(val){ count++; }
       get 'three::attr'(){ count++; }
     });
 
-    defineTestElement(foo);
+    defineTestElement(component);
 
-    expect('one' in foo.prototype).toBe(true);
-    expect('two' in foo.prototype).toBe(true);
-    expect('three' in foo.prototype).toBe(true);
+    expect('one' in component.prototype).toBe(true);
+    expect('two' in component.prototype).toBe(true);
+    expect('three' in component.prototype).toBe(true);
 
-    var node = new foo();
+    var node = new component();
     node.one = 'test';
     node.two = 'test';
     node.three;
 
-    expect('three' in foo.prototype).toBe(true);
+    expect('three' in component.prototype).toBe(true);
 
   });
 
   it("call all descriptor variants", function() {
 
     var count = 0;
-    var foo = xtag.create(class extends XTagElement {
+    var component = xtag.create(class extends XTagElement {
       'one::attr'(){ count++; }
       set 'two::attr'(val){ count++; }
       get 'three::attr'(){ count++; }
@@ -135,9 +135,9 @@ describe("X-Tag's attr extension should", function() {
       }
     });
 
-    defineTestElement(foo);
+    defineTestElement(component);
 
-    var node = new foo();
+    var node = new component();
     node.one = 'test';
     node.two = 'test';
     node.three;
@@ -145,18 +145,18 @@ describe("X-Tag's attr extension should", function() {
     node.four;
     node.five = 'test';
     node.five;
+    expect(node.three).toBe(null);
+    expect(node.four).toBe('test');
+    expect(node.five).toBe('test');
     node.six = 6;
 
-    expect(count).toBe(7);
+    expect(count).toBe(10);
     expect(node.one).toBe('test');
     expect(node.getAttribute('one')).toBe('test');
     expect(node.two).toBe('test');
-    expect(node.getAttribute('two')).toBe('test');
-    expect(node.three).toBe(null);
-    expect(node.getAttribute('three')).toBe(null);
-    expect(node.four).toBe('test');
-    expect(node.getAttribute('four')).toBe('test');
-    expect(node.five).toBe('test');
+    expect(node.getAttribute('two')).toBe('test');  
+    expect(node.getAttribute('three')).toBe(null);  
+    expect(node.getAttribute('four')).toBe('test');   
     expect(node.getAttribute('five')).toBe('test');
     expect(node.six).toBe(6);
     expect(node.getAttribute('six')).toBe('6');
@@ -166,7 +166,7 @@ describe("X-Tag's attr extension should", function() {
   it("correctly handles boolean attributes", function() {
 
     var count = 0;
-    var foo = xtag.create(class extends XTagElement {
+    var component = xtag.create(class extends XTagElement {
       'one::attr(boolean)'(){ count++; }
       set 'two::attr(boolean)'(val){
         count++;
@@ -175,9 +175,9 @@ describe("X-Tag's attr extension should", function() {
       get 'three::attr(boolean)'(){ count++; }
     });
 
-    defineTestElement(foo);
+    defineTestElement(component);
 
-    var node = new foo();
+    var node = new component();
     node.one = 'test';
     node.two = 'test';
     node.three = 'test';
@@ -210,7 +210,7 @@ describe("X-Tag's event extension should", function() {
       }
     }
 
-    var foo = xtag.create(class extends XTagElement {
+    var component = xtag.create(class extends XTagElement {
       constructor(){
         super();
         var img = document.createElement('img');
@@ -220,14 +220,73 @@ describe("X-Tag's event extension should", function() {
       'loaded::event'(){
         count++;
         expect(count).toBe(2);
+        delete xtag.events.loaded;
         done();
       }
     });
 
-    defineTestElement(foo);
+    defineTestElement(component);
 
-    var node = new foo();
+    var node = new component();
+  });
+
+});
+
+describe("X-Tag's template extension should", function() {
+
+  it("attach unnamed template properties as default", function() {
     
+    var count = 0;
+    var component = xtag.create(class extends XTagElement {
+      '::template'(){
+        return `<h1>title1</h1><p>content1</p>`;
+      }
+    });
+
+    defineTestElement(component);
+
+    var node = new component();
+    node.render();
+    expect(node.firstElementChild.textContent).toBe('title1');
+    expect(node.lastElementChild.textContent).toBe('content1');
+  });
+
+  it("attach a named template and render when referenced", function() {
+    
+    var count = 0;
+    var component = xtag.create(class extends XTagElement {
+      'foo::template'(){
+        return `<h1>title2</h1><p>content2</p>`;
+      }
+    });
+
+    defineTestElement(component);
+
+    var node = new component();
+    node.render('foo');
+    expect(node.firstElementChild.textContent).toBe('title2');
+    expect(node.lastElementChild.textContent).toBe('content2');
+  });
+
+  it("include the right values when a template is rendered", function() {
+    
+    var count = 0;
+
+    var component = xtag.create(class extends XTagElement {
+      get 'foo::attr'(){}
+      'bar'(){ return 'bar' }
+      '::template'(){
+        return `<h1>${this.foo}</h1><p>${this.bar()}</p>`;
+      }
+    });
+
+    defineTestElement(component);
+
+    var node = new component();
+    node.setAttribute('foo', 'foo');
+    node.render();
+    expect(node.firstElementChild.textContent).toBe('foo');
+    expect(node.lastElementChild.textContent).toBe('bar');
   });
 
 });

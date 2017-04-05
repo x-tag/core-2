@@ -70,7 +70,7 @@
             }
           }
         },
-        onParse (klass, prop, args, descriptor){
+        onParse (klass, prop, args, descriptor, key){
           klass.getOptions('attributes')[prop] = descriptor;
           var type = this.types[args[0]] || {};
           let descSet = descriptor.set;
@@ -90,13 +90,15 @@
           }
           delete descriptor.value;
           delete descriptor.writable;
+          delete klass.prototype[key];
         },
         onCompiled (klass, descriptors){
           klass.observedAttributes = Object.keys(klass.getOptions('attributes')).concat(klass.observedAttributes || [])
         }
       },
       event: {
-        onParse (klass, property, args, descriptor){
+        onParse (klass, property, args, descriptor, key){
+          delete klass.prototype[key];
           return false;
         },
         onConstruct (node, property, args, descriptor){
@@ -121,7 +123,7 @@
             else throw new ReferenceError('Template "' + _name + '" is undefined');
           }
         },
-        onParse (klass, property, args, descriptor){
+        onParse (klass, property, args, descriptor, key){
           klass.getOptions('templates')[property || 'default'] = descriptor.value;
           return false;
         }
@@ -175,9 +177,11 @@
       if (ref.attached) ref.attached.forEach(attached => { xtag.removeEvent(node, ref) })
     },
     fireEvent (node, name, obj = {}){
-      obj.bubbles = !(obj.bubbles === false);
-      obj.cancelable = !(obj.cancelable === false);
-      node.dispatchEvent(new CustomEvent(name, obj));
+      let options = Object.assign({
+        bubbles: true,
+        cancelable: true
+      }, obj);
+      node.dispatchEvent(new CustomEvent(name, options));
     }
   }
 
@@ -253,19 +257,19 @@
           let extension;
           let extensionArgs = [];
           let descriptor = descriptors[z];
-          let pseudos = target._pseudos || xtag.pseudos;  
+          let pseudos = target._pseudos || xtag.pseudos;
           z.replace(regexParseProperty, function(){ matches.unshift(arguments);  });
-          matches.forEach(a => function(match, prop, dots, name, args){     
-            property = prop || property;      
+          matches.forEach(a => function(match, prop, dots, name, args){
+            property = prop || property;
             if (args) var _args = args.split(regexCommaArgs);
             if (dots && dots == '::') {
               extensionArgs = _args || [];
-              extension = extensions[name] || xtag.extensions[name];             
+              extension = extensions[name] || xtag.extensions[name];
               if (!processed.get(extension)) processed.set(extension, []);
             }
             else if (!prop){
               let pseudo = pseudos[name];
-              if (pseudo) {    
+              if (pseudo) {
                 for (let y in descriptor) {
                   let fn = descriptor[y];
                   if (typeof fn == 'function' && pseudo.onInvoke) {
@@ -279,10 +283,10 @@
           let attachProperty;
           if (extension) {
             processed.get(extension).push([property, extensionArgs, descriptor]);
-            if (extension.onParse) attachProperty = extension.onParse(target, property, extensionArgs, descriptor);
+            if (extension.onParse) attachProperty = extension.onParse(target, property, extensionArgs, descriptor, z);
           }
-          if (!property || attachProperty === false) delete target.prototype[z];
-          if (property && attachProperty !== false) {
+          if (!property) delete target.prototype[z];
+          else if (attachProperty !== false) {
             let prop = processedProps[property] || (processedProps[property] = {});
             for (let y in descriptor) prop[y] = descriptor[y];
           }
