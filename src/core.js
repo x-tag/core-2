@@ -76,9 +76,13 @@
           let descSet = descriptor.set;
           let typeSet = type.set || HTMLElement.prototype.setAttribute;
           descriptor.set = function(val){
-            var output;
-            if (descSet) output = descSet.call(this, val);
-            typeSet.call(this, prop, typeof output == 'undefined' ? val : output) ;
+            if (!descriptor._skip){
+              descriptor._skip = true;
+              var output;
+              if (descSet) output = descSet.call(this, val);
+              typeSet.call(this, prop, typeof output == 'undefined' ? val : output);
+              descriptor._skip = null;
+            }
           }
           let descGet = descriptor.get;
           let typeGet = type.get || HTMLElement.prototype.getAttribute;
@@ -88,8 +92,6 @@
             if (descGet) output = descGet.call(this, val);
             return typeof output == 'undefined' ? val : output;
           }
-          delete descriptor.value;
-          delete descriptor.writable;
           delete klass.prototype[key];
         },
         onCompiled (klass, descriptors){

@@ -99,7 +99,7 @@ describe("X-Tag's attr extension should", function() {
 
     var count = 0;
     var component = xtag.create(class extends XTagElement {
-      'one::attr'(){ count++; }
+      set 'one::attr'(val){ count++; }
       set 'two::attr'(val){ count++; }
       get 'three::attr'(){ count++; }
     });
@@ -113,9 +113,9 @@ describe("X-Tag's attr extension should", function() {
     var node = new component();
     node.one = 'test';
     node.two = 'test';
-    node.three;
+    var three = node.three;
 
-    expect('three' in component.prototype).toBe(true);
+    expect(count).toBe(3);
 
   });
 
@@ -123,10 +123,10 @@ describe("X-Tag's attr extension should", function() {
 
     var count = 0;
     var component = xtag.create(class extends XTagElement {
-      'one::attr'(){ count++; }
+      set 'one::attr'(val){ count++; }
       set 'two::attr'(val){ count++; }
       get 'three::attr'(){ count++; }
-      'four::attr'(){ count++; }
+      set 'four::attr'(val){ count++; }
       get 'four::attr'(){ count++; }
       set 'five::attr'(val){ count++; }
       get 'five::attr'(){ count++; }
@@ -167,7 +167,7 @@ describe("X-Tag's attr extension should", function() {
 
     var count = 0;
     var component = xtag.create(class extends XTagElement {
-      'one::attr(boolean)'(){ count++; }
+      set 'one::attr(boolean)'(val){ count++; }
       set 'two::attr(boolean)'(val){
         count++;
         return 'bar';
@@ -287,6 +287,37 @@ describe("X-Tag's template extension should", function() {
     node.render();
     expect(node.firstElementChild.textContent).toBe('foo');
     expect(node.lastElementChild.textContent).toBe('bar');
+  });
+
+});
+
+describe("X-Tag pseudos should", function() {
+
+  it("be parsed correctly and called when invoked", function() {
+
+    var count = 0;
+
+    xtag.pseudos.foo = {
+      onInvoke(){
+        count++;
+      }
+    }
+
+    var component = xtag.create(class extends XTagElement {
+      'one:foo'(){ count++; }
+      set 'two::attr:foo'(val){ count++; }
+      'three::event:foo'(){ count++; }
+    });
+
+    defineTestElement(component);
+
+    var node = new component();
+    node.one();
+    node.two = 2;
+    xtag.fireEvent(node, 'three');
+
+    expect(count).toBe(6);
+
   });
 
 });
