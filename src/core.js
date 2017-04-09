@@ -71,6 +71,7 @@
           }
         },
         onParse (klass, prop, args, descriptor, key){
+          if (descriptor.value) throw 'Attribute accessor "'+ prop +'" was declared as a value, but must be declared as get or set';
           klass.getOptions('attributes')[prop] = descriptor;
           var type = this.types[args[0]] || {};
           let descSet = descriptor.set;

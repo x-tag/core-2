@@ -1,23 +1,11 @@
 
 xtag.extensions.src = {
   mixin: (base) => class extends base {
-    constructor(){
-      super();
-    }
-    'src::attr' (val){
-      var self = this;
+    set 'src::attr' (val){
       var xhr = new XMLHttpRequest();
-      console.log(this);
       xhr.open('GET', val, true);
-
-      xhr.onload = function (event) {
-        xtag.fireEvent(self, 'load', { detail: xhr.response });
-      };
-
-      xhr.onerror = function (event) {
-        xtag.fireEvent(self, 'error', { detail: xhr.response });
-      };
-
+      xhr.onload = () => xtag.fireEvent(this, 'load', { detail: xhr.response });
+      xhr.onerror = () => xtag.fireEvent(this, 'error', { detail: xhr.response });
       xhr.send(null);
     }
   }
