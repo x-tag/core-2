@@ -95,7 +95,7 @@
           }
           delete klass.prototype[key];
         },
-        onCompiled (klass, descriptors){
+        onCompiled (klass){
           klass.observedAttributes = Object.keys(klass.getOptions('attributes')).concat(klass.observedAttributes || [])
         }
       },
@@ -126,9 +126,12 @@
             else throw new ReferenceError('Template "' + _name + '" is undefined');
           }
         },
-        onParse (klass, property, args, descriptor, key){
+        onParse (klass, property, args, descriptor){
           klass.getOptions('templates')[property || 'default'] = descriptor.value;
           return false;
+        },
+        onConstruct (node, property, args){
+          if (JSON.parse(args[0] || false)) node.render(property);
         }
       }
     },

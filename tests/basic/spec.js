@@ -251,6 +251,33 @@ describe("X-Tag's template extension should", function() {
     expect(node.lastElementChild.textContent).toBe('content1');
   });
 
+  it("auto-render templates marked with the option", function() {
+    
+    var component1 = xtag.create(class extends XTagElement {
+      '::template(true)'(){
+        return `<h1>title auto 1</h1><p>content auto 1</p>`;
+      }
+    });
+
+    var component2 = xtag.create(class extends XTagElement {
+      'foo::template(true)'(){
+        return `<h1>title auto 2</h1><p>content auto 2</p>`;
+      }
+    });
+
+    defineTestElement(component1);
+
+    var node1 = new component1();
+    expect(node1.firstElementChild.textContent).toBe('title auto 1');
+    expect(node1.lastElementChild.textContent).toBe('content auto 1');
+
+    defineTestElement(component2);
+
+    var node2 = new component2();
+    expect(node2.firstElementChild.textContent).toBe('title auto 2');
+    expect(node2.lastElementChild.textContent).toBe('content auto 2');
+  });
+
   it("attach a named template and render when referenced", function() {
     
     var count = 0;
