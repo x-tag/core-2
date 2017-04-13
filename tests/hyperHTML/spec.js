@@ -1,5 +1,4 @@
 
-
 describe("The hyperHTML extension should", function() {
 
   it("render its content when loaded", function() {
