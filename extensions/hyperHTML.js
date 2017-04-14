@@ -25,7 +25,7 @@ xtag.extensions.hyper = {
     return false;
   },
   onConstruct (node, property, args){
-    if (JSON.parse(args[0] || false)) node.render(property);
+    if (JSON.parse(args[0] || false)) node.render(property)
   }
 }
 
