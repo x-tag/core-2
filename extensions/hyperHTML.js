@@ -10,13 +10,12 @@ xtag.extensions.hyper = {
     set 'hyper::attr' (name){
       this.render(name);
     }
-    get hyper (){
-      return this.constructor.getOptions('hyper');
-    }
     render (name){
       var _name = name || 'default';
-      var template = this.hyper[_name];
-      if (template) template.call(this, hyperHTML.bind(this));
+      var template = this.constructor.getOptions('hyper')[_name];
+      if (template) template.call(this,
+        (this._hyper || (this._hyper = {}))[_name] || (this._hyper[_name] = hyperHTML.bind(this))
+      );
       else throw new ReferenceError('hyperHTML template "' + _name + '" is undefined');
     }
   },
