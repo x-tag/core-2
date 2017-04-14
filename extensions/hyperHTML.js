@@ -16,9 +16,7 @@ xtag.extensions.hyper = {
     render (name){
       var _name = name || 'default';
       var template = this.hyper[_name];
-      if (template) {
-        template.call(this, hyperHTML.bind(this));
-      }
+      if (template) template.call(this, hyperHTML.bind(this));
       else throw new ReferenceError('hyperHTML template "' + _name + '" is undefined');
     }
   },
