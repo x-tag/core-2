@@ -53,10 +53,10 @@ describe("The hyperHTML extension should", function() {
     var node = new component();
     var first = node.firstElementChild;
     var last = node.lastElementChild;
-    expect(node.firstElementChild.textContent).toBe('foo 0');
+    expect(node.firstElementChild.innerHTML).toBe('foo 0');
     expect(node.lastElementChild.value).toBe('bar 1');
     node.render('second');
-    expect(node.firstElementChild.textContent).toBe('foo 2');
+    expect(node.firstElementChild.innerHTML).toBe('foo 2');
     expect(node.lastElementChild.value).toBe('bar 3');
     expect(node.firstElementChild === first).toBe(false);
     expect(node.lastElementChild === last).toBe(false);
