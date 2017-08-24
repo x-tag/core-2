@@ -7,8 +7,8 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
 
   <title>X-Tag - Web Components Library</title>
-  <link rel="icon" type="image/png" href="site/images/favicon.png?r1" />
-  <link href='https://fonts.googleapis.com/css?family=Telex|Karla' rel='stylesheet' type='text/css'>
+  <link rel="icon" type="image/png" href="site/images/favicon.png?r2" />
+  <link href='https://fonts.googleapis.com/css?family=Karla|Overpass' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="site/css/global.css" />
 </head>
 
@@ -77,10 +77,10 @@
   <main>
     <section id="home_section">
 
-      <h2 id="home_logo"><div class="text-logo"><span>&lt;</span><b>X</b><span>&gt;</span></div></h2>
+      <h2 id="home_logo" data-version="2.0 beta"><div class="text-logo"><span>&lt;</span><b>X</b><span>&gt;</span></div></h2>
       <h2>X-Tag is a
-      <span font="green">lightweight, power-packed </span> 
-      <span font="blue">Web Components library</span> 
+      <span font="blue">lightweight, power-packed </span> 
+      <span font="green">Web Components library</span> 
       that gets you there fast, and stays in its own lane.</h2>
 
       <hr />
@@ -118,9 +118,675 @@
       In the absence of native Custom Element support, X-Tag uses a set of <a target="_blank" href="https://github.com/webcomponents/webcomponentsjs">polyfills</a>
       shared with Google's Polymer framework. You can view our package options in the <x-action event="viewchange" data-view="builds">Builds</x-action> section</p>
 
+
+      <hr/>
+      
+      <h2 text-shadow>Browser Support</h2>
+      <div id="browser_support" class="feature-row">
+        <div>
+          <svg id="browser_edge" width="100%" height="1em" viewBox="0 0 399 432">
+            <path fill="#ffffff" d="M80.9746094,114.404297 C29.7135331,146.31357 0.416015625,191.658203 0.416015625,191.658203 C0.416015625,191.658203 8.00793654,96.5783329 80.9746094,40.9433594 C109.99433,18.8166636 149.669408,0.278808594 203.032715,0.278808594 C223.079627,0.278808594 265.118164,3.76660156 302.984375,27.1123047 C340.850586,50.4580078 356.149414,70.0136719 373.208984,98.6445312 C380.570259,110.998865 386.565681,126.870142 390.305664,142.179688 C397.312935,170.863811 398.165039,205.168945 398.165039,205.168945 L398.165039,250.359375 L127.542969,250.359375 C127.542969,250.359375 120.933594,341.28125 245.390625,341.28125 C288.675172,341.28125 303.832031,334.481445 318.068359,330.265625 C340.35498,323.665862 361.875,308.955078 361.875,308.955078 L361.916016,399.796875 C361.916016,399.796875 310.980469,431.170898 234.030273,431.170898 C212.360573,431.170898 189.523812,429.353496 167.5,422.208008 C148.255049,415.964103 107.950758,399.1222 80.9746094,359.650391 C71.4321522,345.687758 61.0920706,327.107886 55.9707031,308.955078 C50.4340389,289.330241 50.5019531,270.265226 50.5019531,259.761719 C50.5019531,220.477429 63.9233273,182.970681 87.2128906,155.856445 C117.379883,120.735352 155.509766,105.273438 155.509766,105.273438 C155.509766,105.273438 143.089844,119.75293 135.450195,137.780273 C127.810547,155.807617 125.720703,173.945312 125.720703,173.945312 L278.529468,173.945312 C278.529468,173.945312 287.466797,82.6347656 192.064453,82.6347656 C156.11735,82.6347656 111.967456,95.111701 80.9746094,114.404297 Z"/>
+          </svg>
+          Edge
+        </div><div>
+          <svg id="browser_chrome" width="100%" height="1em" viewBox="0 0 1024 1024">
+            <path fill="#ffffff" d="M258.278 446.542l-146.532-253.802c93.818-117.464 238.234-192.74 400.254-192.74 187.432 0 351.31 100.736 440.532 251h-417.77c-7.504-0.65-15.092-1-22.762-1-121.874 0-224.578 83.644-253.722 196.542zM695.306 325h293.46c22.74 57.93 35.234 121.004 35.234 187 0 280.826-226.1 508.804-506.186 511.926l209.394-362.678c29.48-42.378 46.792-93.826 46.792-149.248 0-73.17-30.164-139.42-78.694-187zM326 512c0-102.56 83.44-186 186-186s186 83.44 186 186c0 102.56-83.44 186-186 186s-186-83.44-186-186zM582.182 764.442l-146.578 253.878c-246.532-36.884-435.604-249.516-435.604-506.32 0-91.218 23.884-176.846 65.696-251.024l209.030 362.054c41.868 89.112 132.476 150.97 237.274 150.97 24.3 0 47.836-3.34 70.182-9.558z"></path>
+          </svg>
+          Chrome <i>(desktop and mobile)</i>
+        </div><div>
+          <svg id="browser_firefox" width="100%" height="1em" viewBox="0 0 1024 1024">
+            <path fill="#ffffff" d="M1022.526 334.14l-11.86 76.080c0 0-16.954-140.856-37.732-193.514-31.846-80.688-46.014-80.040-46.108-79.922 21.33 54.204 17.462 83.324 17.462 83.324s-37.792-102.998-137.712-135.768c-110.686-36.282-170.57-26.364-177.488-24.486-1.050-0.008-2.064-0.010-3.030-0.010 0.818 0.062 1.612 0.146 2.426 0.212-0.034 0.020-0.090 0.042-0.082 0.052 0.45 0.548 122.306 21.302 143.916 50.996 0 0-51.76 0-103.272 14.842-2.328 0.666 189.524 23.964 228.746 215.674 0 0-21.030-43.876-47.040-51.328 17.106 52.036 12.714 150.776-3.576 199.85-2.096 6.312-4.24-27.282-36.328-41.75 10.28 73.646-0.616 190.456-51.708 222.632-3.982 2.504 32.030-115.31 7.242-69.762-142.708 218.802-311.404 100.972-387.248 49.11 38.866 8.462 112.654-1.318 145.314-25.612 0.042-0.030 0.078-0.056 0.118-0.086 35.468-24.252 56.472-41.964 75.334-37.772 18.874 4.214 31.438-14.726 16.78-31.53-14.676-16.838-50.314-39.978-98.524-27.366-34 8.904-76.134 46.522-140.448 8.432-49.364-29.25-54.012-53.546-54.45-70.376 1.218-5.966 2.754-11.536 4.576-16.624 5.682-15.87 22.912-20.658 32.494-24.438 16.256 2.792 30.262 7.862 44.968 15.406 0.19-4.894 0.252-11.39-0.018-18.76 1.41-2.802 0.538-11.252-1.722-21.58-1.302-10.308-3.42-20.974-6.752-30.692 0.012-0.002 0.020-0.010 0.030-0.014 0.056-0.018 0.108-0.040 0.156-0.070 0.078-0.044 0.146-0.112 0.208-0.19 0.012-0.020 0.030-0.034 0.044-0.052 0.082-0.124 0.154-0.272 0.198-0.466 1.020-4.618 12.022-13.524 25.718-23.1 12.272-8.58 26.702-17.696 38.068-24.752 10.060-6.248 17.72-10.882 19.346-12.098 0.618-0.466 1.358-1.012 2.164-1.636 0.15-0.116 0.3-0.232 0.454-0.354 0.094-0.074 0.19-0.148 0.286-0.226 5.41-4.308 13.484-12.448 15.178-29.578 0.004-0.042 0.010-0.080 0.012-0.122 0.050-0.504 0.092-1.014 0.13-1.534 0.028-0.362 0.050-0.726 0.072-1.096 0.014-0.284 0.032-0.566 0.044-0.856 0.030-0.674 0.050-1.364 0.060-2.064 0-0.040 0.002-0.076 0.004-0.116 0.022-1.658-0.006-3.386-0.104-5.202-0.054-1.014-0.126-1.93-0.298-2.762-0.008-0.044-0.018-0.092-0.028-0.136-0.018-0.082-0.036-0.164-0.058-0.244-0.036-0.146-0.076-0.292-0.122-0.43-0.006-0.018-0.010-0.032-0.016-0.046-0.052-0.16-0.112-0.314-0.174-0.464-0.004-0.006-0.004-0.010-0.006-0.016-1.754-4.108-8.32-5.658-35.442-6.118-0.026-0.002-0.050-0.002-0.076-0.002v0c-11.066-0.188-25.538-0.194-44.502-0.118-33.25 0.134-51.628-32.504-57.494-45.132 8.040-44.46 31.276-76.142 69.45-97.626 0.722-0.406 0.58-0.742-0.274-0.978 7.464-4.514-90.246-0.124-135.186 57.036-39.888-9.914-74.654-9.246-104.616-2.214-5.754-0.162-12.924-0.88-21.434-2.652-19.924-18.056-48.448-51.402-49.976-91.208 0 0-0.092 0.072-0.252 0.204-0.020-0.382-0.056-0.76-0.072-1.142 0 0-60.716 46.664-51.628 173.882-0.022 2.036-0.064 3.986-0.12 5.874-16.432 22.288-24.586 41.020-25.192 45.156-14.56 29.644-29.334 74.254-41.356 141.98 0 0 8.408-26.666 25.284-56.866-12.412 38.022-22.164 97.156-16.436 185.856 0 0 1.514-19.666 6.874-47.994 4.186 55.010 22.518 122.924 68.858 202.788 88.948 153.32 225.67 230.74 376.792 242.616 26.836 2.212 54.050 2.264 81.424 0.186 2.516-0.178 5.032-0.364 7.55-0.574 30.964-2.174 62.134-6.852 93.238-14.366 425.172-102.798 378.942-616.198 378.942-616.198z"></path>
+          </svg>
+          Firefox <i>(desktop and mobile)</i>
+        </div><div>
+          <svg id="browser_safari" width="100%" height="1em" viewBox="0 0 1024 1024">
+            <path fill="#ffffff" d="M512 64c-24.064 0-47.708 1.792-70.824 5.212-0.3-0.782-0.624-1.548-0.982-2.296 12.826-10.002 19.55-23.83 16.634-37.552-3.734-17.564-22.394-29.364-46.434-29.364-5.18 0-10.458 0.562-15.68 1.672-30.168 6.414-50.146 28.622-45.482 50.562 2.834 13.338 14.292 23.338 30.164 27.384-0.032 0.972-0.016 1.95 0.042 2.934-200.622 57.53-347.438 242.338-347.438 461.448 0 265.098 214.904 480 480 480 265.098 0 480-214.902 480-480 0-265.096-214.902-480-480-480zM364.882 48.908c-2.706-12.726 12.48-27.19 33.158-31.584 4.132-0.878 8.29-1.324 12.354-1.324 16.036 0 28.694 6.864 30.784 16.69 1.596 7.51-3.070 15.61-11.386 21.904-7.034-4.966-16.016-7.126-25.1-5.196-9.044 1.922-16.348 7.508-20.758 14.856-10.184-2.45-17.508-8.084-19.052-15.346zM769.386 801.386c-43.968 43.968-97.21 75.278-155.31 92.154l-42.396-68.768-10.746 79.958c-16.090 2.152-32.426 3.27-48.934 3.27-97.228 0-188.636-37.864-257.386-106.614-43.968-43.966-75.278-97.21-92.154-155.308l68.768-42.398-79.96-10.746c-2.15-16.090-3.268-32.426-3.268-48.934 0-97.228 37.862-188.636 106.614-257.386 43.968-43.968 97.212-75.278 155.31-92.156l42.396 68.77 10.748-79.96c16.088-2.15 32.424-3.268 48.932-3.268 97.228 0 188.636 37.862 257.386 106.614 43.968 43.968 75.278 97.212 92.154 155.31l-68.77 42.398 79.96 10.746c2.152 16.088 3.27 32.424 3.27 48.932 0 97.228-37.864 188.636-106.614 257.386zM760.902 295.098l-196.978 149.704c-14.644-7.658-30.876-12.062-47.416-12.726l-51.080-107.18-3.068 118.664c-13.284 6.536-25.104 15.664-34.876 26.95l-63.088-22.364 46.092 48.538c-6.334 13.518-9.866 28.030-10.434 42.824l-107.158 51.066 118.738 3.068c0.38 0.768 0.774 1.526 1.17 2.282l-149.704 196.98 196.978-149.704c14.644 7.656 30.874 12.060 47.416 12.724l51.080 107.182 3.066-118.664c13.286-6.538 25.106-15.664 34.878-26.952l63.090 22.368-46.094-48.54c6.336-13.52 9.868-28.030 10.436-42.824l107.156-51.066-118.736-3.070c-0.378-0.766-0.774-1.524-1.17-2.28l149.702-196.98zM512.102 444.534v0zM492.042 450.098c6.726-1.43 13.444-2.118 20.056-2.118 4.144 0 8.25 0.27 12.294 0.796l0.092 0.032-0.010-0.022c8.732 1.144 17.176 3.5 25.132 6.896l-71.546 54.376-54.38 71.552c-2.376-5.594-4.27-11.484-5.58-17.652-11.026-51.86 22.080-102.836 73.942-113.86zM562.12 625.884v0 0c-9.056 5.544-19.182 9.684-30.16 12.018-6.726 1.43-13.444 2.118-20.054 2.118-4.15 0-8.258-0.272-12.308-0.798l-0.068-0.010c-8.734-1.142-17.174-3.5-25.132-6.894l71.544-54.376 54.38-71.554c2.376 5.594 4.27 11.486 5.58 17.654 8.69 40.882-10.056 81.2-43.782 101.842z"></path>
+          </svg>
+          Safari <i>(Mac and iOS)</i>
+        </div><div>
+          <svg id="browser_opera" width="100%" height="1em" viewBox="0 0 1024 1024">
+            <path fill="#ffffff" d="M510.046 0c-279.724 0-480.748 202.896-480.748 507.224 0 270.818 195.502 516.776 480.784 516.776 288.078 0 484.62-245.886 484.62-516.776 0-306.76-207.446-507.224-484.656-507.224zM688.358 498.542c-0.068 169.352-9.098 410.482-178.276 410.482v0.034c-166.784 0-173.432-241.266-173.432-410.308 0-198.38 18.56-388.568 173.432-388.568 154.874 0 178.276 192.584 178.276 388.36z"></path>
+          </svg>
+          Opera <i>(desktop and mobile)</i>
+        </div><div>
+            <svg id="browser_android" width="100%" height="1em" viewBox="0 0 24 24">
+              <path fill="#ffffff" d="M15 5.016v-1.031h-0.984v1.031h0.984zM9.984 5.016v-1.031h-0.984v1.031h0.984zM15.516 2.156c1.5 1.078 2.484 2.859 2.484 4.828h-12c0-1.969 0.938-3.75 2.438-4.828l-1.313-1.313c-0.188-0.188-0.188-0.516 0-0.703s0.516-0.188 0.703 0l1.5 1.5c0.797-0.422 1.734-0.656 2.672-0.656s1.828 0.234 2.625 0.656l1.5-1.5c0.188-0.188 0.516-0.188 0.703 0s0.188 0.516 0 0.703zM20.484 8.016c0.844 0 1.5 0.656 1.5 1.5v6.984c0 0.844-0.656 1.5-1.5 1.5s-1.5-0.656-1.5-1.5v-6.984c0-0.844 0.656-1.5 1.5-1.5zM3.516 8.016c0.844 0 1.5 0.656 1.5 1.5v6.984c0 0.844-0.656 1.5-1.5 1.5s-1.5-0.656-1.5-1.5v-6.984c0-0.844 0.656-1.5 1.5-1.5zM6 18v-9.984h12v9.984c0 0.563-0.422 0.984-0.984 0.984h-1.031v3.516c0 0.844-0.656 1.5-1.5 1.5s-1.5-0.656-1.5-1.5v-3.516h-1.969v3.516c0 0.844-0.656 1.5-1.5 1.5s-1.5-0.656-1.5-1.5v-3.516h-1.031c-0.563 0-0.984-0.422-0.984-0.984z"></path>
+            </svg>
+            Android Browser <i>(OS version 5+)</i>
+          </div>
+      </div>
+
     </section>
 
-    <section id="wg_section">
+    <section id="docs_section">
+
+      
+        <h2 id="getting_started">Getting Started</h2>
+        
+                <h3>Registration - Where it All Begins</h3>
+        
+                  <p>
+                    The most important method in the X-Tag library is <code>xtag.register()</code>. The register function on the X-Tag object is what you'll use
+                    to create new custom element definitions, which can include things like lifecycle callbacks, attibute-linked getters/setters (accessors),
+                    and event listeners. Here's what defining a simple custom element looks like with X-Tag:
+                  </p>
+        
+        <x-code-prism>
+        xtag.register('x-frankenstein', {
+          lifecycle:{
+            created: function(){
+              alert("Look! It's moving. It's alive!");
+            }
+          }
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+        <h3>Content is King</h3>
+        
+          <p>
+            For many of the components you create, you'll want to insert various elements into them for structure and presentation purposes. X-Tag provides some awesome features to help you with this.
+            The primary method for adding content to your component with X-Tag is the <code>content</code> property of your component registration defintion.
+            The <code>content</code> property accepts both a simple HTML string, or a comment string within a function to enable multiline HTML snippets. Below are examples
+            of what each variant looks like in practice.
+          </p>
+        
+        <h4>Simple string:</h4>
+        
+        <x-code-prism>
+        xtag.register('x-frankenstein', {
+          content: '‹h2›My name is Frank‹/h2›' +
+                   '‹span›I work for a mad scientist‹/span›'
+        });
+        </x-code-prism>
+        
+        <h4>Multi-line string:</h4>
+        
+        <x-code-prism>
+        xtag.register('x-frankenstein', {
+          content: function(){/*
+            ‹h2›My name is Frank‹/h2›
+            ‹span›I work for a mad scientist‹/span›
+          */}
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+                <h3>Meet the Lifecycle Callbacks</h3>
+        
+                  <p>
+                    There are four lifecycle callbacks you will rely on to develop your components.
+                    Here's an example of what each looks like when specified in an element definition:
+                  </p>
+        
+        <x-code-prism>
+        xtag.register('x-foo', {
+          lifecycle:{
+            created: function(){
+              alert('I fire when an ‹x-foo› is CREATED');
+            },
+            inserted: function(){
+              alert('I fire when an ‹x-foo› is INSERTED to the DOM');
+            },
+            removed: function(){
+              alert('I fire when an ‹x-foo› is REMOVED from the DOM');
+            },
+            attributeChanged: function(attrName, oldValue, newValue){
+              alert('I fire when an ATTRIBUTE is CHANGED on an ‹x-foo›');
+            }
+          }
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+                <h3>Adding Methods to the Mix</h3>
+        
+                  <p>
+                    Your custom elements will likely need some of their own, unique methods to provide the functionality you desire.
+                    X-Tag makes method addition a snap, just add a <code>methods</code> object to your top-level <code>xtag.register()</code> definition object
+                    and include your methods within it - here's what it looks like:
+                  </p>
+        
+        <x-code-prism>
+        xtag.register('x-shouter', {
+          lifecycle:{
+            created: function(){
+              this.shout('WHY AM I YELLING?');
+            }
+          },
+          methods: {
+            shout: function(message){
+              alert(message);
+            }
+          }
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+                <h3>Say Hello to Accessors</h3>
+        
+                  <p>
+                    X-Tag has built-in features to deal with attributes, setters, getters, and link them all together to provide a common interface.
+                    To use these features, you first add an <code>accessors</code> object to the top level of your <code>xtag.register()</code> definition object.
+                    Within this object you can add keys names that will be made available as getters/setters, as seen below. By adding the key <code>attribute</code>,
+                    to an accessor, it tells X-Tag to link the setter/getter with the corresponding HTML attribute of the same name. When attributes are linked to
+                    a getter/setter, their gets, sets, and state will remain in sync without having to write any additional code.
+                  </p>
+        
+                  <p>
+                    The `attribute` property of an accessor has a few options you can use to change behavior and perform advanced syncing to other parts of your component.
+                    Some of these advanced options include `boolean`, `property`, and `validate`, which are detailed in the examples below.
+                  </p>
+        
+        <x-code-prism>
+        xtag.register('x-foo', {
+          content: '‹input /›',
+          lifecycle:{
+            created: function(){
+              this.xtag.input = this.querySelector('input');
+            }
+          },
+          accessors: {
+            disabled: {
+              // The `attribute` property links node.bar gets/sets to the bar="" attribute
+              attribute: {
+                // Including the boolean property turns this into a boolean attribute/setter
+                boolean: true,
+                // The property field allows you reflect changes down to a cached node.
+                // Notice the input element is cached to the `input` property in `created`
+                property: 'input'
+              },
+              get: function(){
+                // do something when the getter is accessed
+              },
+              set: function(value){
+                // act on the value being passed to the setter
+              }
+            }
+          }
+        });
+        
+        xtag.register('x-bar', {
+          accessors: {
+            // X-Tag utomatically maps camelcased accessor setter names to their
+            // dashed attribute equivalents. In this example, `limitedCount` maps
+            // to the `limited-count` attribute.
+            limitedCount: {
+              attribute: {
+                // Allows you to validate values passed to your accessor
+                validate: function(val){
+                  return val < 10 ? val : 10;
+                }
+              },
+              get: function(val){
+                // do something when the getter is accessed
+              },
+              set: function(value){
+                // act on the value being passed to the setter
+              }
+            }
+          }
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+        <h3>The DL on Events</h3>
+        <p>
+          X-Tag provides an insanely powerful event system  you'll use often in developing your components.
+          We'll cover the basics here, and leave the more advanced features for a special tutorial dedicated to the topic.
+        </p>
+        
+        <p>
+          The first thing you'll need to do to attach events to your component is add an <code>events</code> object to the top level
+          of your <code>xtag.register()</code> definition object. The keys of this object are the names of the events you wish to attach to your custom element.
+          In the example below you'll see a familiar, native event name, <code>focus</code>, and a couple that X-Tag provides to make life easier:
+          <code>tap</code> and <code>move</code>. These are just two of the custom events X-Tag provides that unify, optimize, and simplify common event interactions
+          across platforms and devices. In the case of <code>tap</code> and <code>move</code>, X-Tag is unifying the mouse and touch equivalents of these events - have a look:
+        </p>
+        
+        <x-code-prism>
+        xtag.register('x-foo', {
+          events: {
+            focus: function(){
+              // perform an action when the user focuses something
+              // within your custom element.
+            },
+            tap: function(){
+              // perform an action when the user taps your custom
+              // element via a mouse click or touch input.
+            },
+            move: function(){
+              // perform an action when the user moves their
+              // mouse click or finger (touch) over your element
+            }
+          }
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+        <h3>Gettin' Jedi with Pseudos</h3>
+        
+        <p>
+          One advanced feature of X-Tag you should be aware of right off the bat is the <code>delegate</code> pseudo.
+          X-Tag features a function modifier system called <code>pseudos</code> which allows you to seamlessly wrap
+          functions anywhere in your custom element defintion object (lifecycle callbacks, methods, accessors, and events)
+          to extend their functionality. The <code>delegate</code> pseudo enables you to quickly add event delegation
+          (filtering of event targets based on CSS expressions) to any event function you add to your component. Here's an example:</p>
+        
+        <x-code-prism>
+        xtag.register('x-foo', {
+          content: '‹input/›',
+          events: {
+            'tap:delegate(input)': function(){
+              // Perform an action only when the user taps on an
+              // ‹input/› element within your component.
+            }
+          }
+        });
+        </x-code-prism>
+        
+        <h4>Create your own Pseudo:</h4>
+        
+        <p>
+          Once you create a pseudo and add it to the main xtag.pseudos object, as show below,
+          you can then use it on any key of your custom element defintion objects that has a
+          function as its value.
+        </p>
+        
+        <x-code-prism>
+        xtag.pseudos.example = {
+          onAdd: function(){
+            /*
+              This function is fired once when the base function is added to
+              the target object. For instance:
+        
+              If you added an event with xtag.addEvent(someNode, 'tap:example', fn),
+              the onAdd function of the 'example' pseudo would be fired once when
+              the event is first attached to the element 'someNode'.
+            */
+        
+          },
+          onRemove: function(){
+            /*
+              This is basically the opposite of the onAdd function above.
+              With onRemove, you can clean up whatever you may have done
+              in your onAdd or action function invocations.
+            */
+          },
+          action: function(pseudo, event) {
+            /*
+              This function is fired each time the pseudo chain is fired.
+              Pseudo actions are fired in the order they are chained, meaning
+              the in the pseudo 'toggle:log:example', the action function
+              for the 'log' pseudo would fire first, then the 'example' action
+              and finally the base function 'toggle' they are chained to.
+            */
+          }
+        };
+        </x-code-prism>
+        
+        <hr/>
+        
+        <h3>Inheritance</h3>
+        
+        <p>X-Tag uses the standard Custom Elements API for inheritance. 
+          Custom elements can inherit from standard DOM elements by using 
+          the <code>extends</code> property.
+         </p>
+        
+        <x-code-prism>
+        xtag.register('x-checkbox', {
+          extends: 'input',
+          lifecycle: {
+            created : function(){
+              this.type = "checkbox";
+            }
+          }
+        });
+        </x-code-prism>
+        
+        <p>To use the extended standard DOM element the <code>is</code> syntax is need.</p>
+        
+        <x-code-prism>
+        &lt;input is="x-checkbox"&gt; &lt;/input&gt; 
+        </x-code-prism>
+        
+        <h4>Extending custom elements:</h4>
+        
+        <p>
+            To extend custom elements, you need to use the 
+            the <code>prototype</code> property. Keep in mind that when any of the properties of the custom element is 
+            overwritten, it gets added to an execution queue. When accessed, the base property will be executed first
+            and then the rest of the queue will be accessed. For this cases the <code>is</code> syntax is
+            not needed.
+        </p>
+        
+        <x-code-prism>
+        var xSpan = xtag.register('x-span', {
+          content: '<span></span>',
+          methods: {
+            render() {
+              // some render logic
+            },
+          },
+        });
+        
+        xtag.register('x-money-span', {
+          prototype: xSpan.prototype,
+          methods: {
+            render: function() {
+                // xSpan render logic gets executed first
+                // x-money-span render logic is executed next
+            },
+          }
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+        <h1>API Reference</h1>
+        
+        <h2 id="api_xtag_register">xtag.register(NAME, DEFINITION)</h2>
+        
+        <p>
+          Define and register a new custom element. The example below shows test values for each of
+          the top-level definition objects.
+        </p>
+        
+        <table>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>NAME</td>
+            <td>String</td>
+            <td>The custom element's tag name <i>(must contain a dash)</i></td>
+          </tr>
+          <tr>
+            <td>DEFINITION</td>
+            <td>Object</td>
+            <td>An object containing the various features your custom element will utilize</td>
+          </tr>
+        </table>
+        
+        <x-code-prism>
+        xtag.register('x-foo', {
+          content: '‹input/›',
+          lifecycle:{
+            created: function(){},
+            inserted: function(){},
+            removed: function(){},
+            attributeChanged: function(){}
+          },
+          methods: {
+            someMethod: function(){}
+          },
+          accessors: {
+            someAccessor: {
+              // links to the 'some-accessor' attribute
+              attribute: {},
+              set: function(){},
+              get: function(){}
+            }
+          },
+          events: {
+            tap: function(){},
+            focus: function(){}
+          }
+        });
+        </x-code-prism>
+        
+        <hr/>
+        
+        <h2 id="api_xtag_query">xtag.query(ELEMENT, SELECTOR)</h2>
+        
+        <p>
+          Wrapper for querySelectorAll that always returns a true JavaScript Array. This is handly
+          for ensuring selections are easily iterable with standard JS Array functions, like
+          <code>forEach</code> and <code>map</code>.
+        </p>
+        
+        <table>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ELEMENT</td>
+            <td>DOM element refrence</td>
+            <td>
+              A reference to the DOM element you wish to query
+            </td>
+          </tr>
+          <tr>
+            <td>SELECTOR</td>
+            <td>String</td>
+            <td>
+              The CSS selector you would like to query the element with
+            </td>
+          </tr>
+        </table>
+        
+        <x-code-prism>
+        var itemArray = xtag.query(document.body, 'ul li');
+        </x-code-prism>
+        
+        <hr />
+        
+        <h2 id="api_xtag_querychildren">xtag.queryChildren(ELEMENT, SELECTOR)</h2>
+        
+        <p>
+          Query only the direct children of an element with a provided selector.
+        </p>
+        
+        <table>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ELEMENT</td>
+            <td>DOM element refrence</td>
+            <td>
+              A reference to the DOM element you wish to query.
+            </td>
+          </tr>
+          <tr>
+            <td>SELECTOR</td>
+            <td>String</td>
+            <td>
+              The CSS selector string you would like to test for matches against the element's direct children.
+            </td>
+          </tr>
+        </table>
+        
+        <x-code-prism>
+        var onlyChildButtons = xtag.queryChildren(myToolbar, 'button');
+        </x-code-prism>
+        
+        <hr />
+        
+        <h2 id="api_xtag_createfragment">xtag.createFragment(CONTENT)</h2>
+        
+        <p>
+          Generates a document fragment from a string, list of nodes, or a multi-line comment string.
+        </p>
+        
+        <table>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>CONTENT</td>
+            <td>
+              <ul bulleted>
+                <li>String</li>
+                <li>Multi-line function comment</li>
+              </ul>
+            </td>
+            <td>
+              Pass in a string or function with a multi-line comment string of HTML, and a Document Fragment will be created from the contents.
+            </td>
+          </tr>
+        </table>
+        
+        <x-code-prism>
+        var fragFromString = xtag.createFragment('‹div›Hello World!‹/div›');
+        
+        var fragFromFunction = xtag.createFragment(function(){/*
+          ‹header›Hello‹/header›
+          ‹section›I'm a multi-line HTML fragment‹/section›
+          ‹footer›Goodbye‹/footer›
+        */});
+        </x-code-prism>
+        
+        <hr />
+        
+        <h2 id="api_xtag_addevent">xtag.addEvent(ELEMENT, TYPE, HANDLER)</h2>
+        
+        <p>
+          Add a native, custom, or X-Tag library event listener to an element. The TYPE field also
+          accepts pseudo chains for even more powerful event handling.
+        </p>
+        
+        <table>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ELEMENT</td>
+            <td>DOM element reference</td>
+            <td>
+              The element you would like to attach an event listener to.
+            </td>
+          </tr>
+          <tr>
+            <td>TYPE</td>
+            <td>String</td>
+            <td>
+              The event name, with any event pseudos you may want to chain.
+            </td>
+          </tr>
+          <tr>
+            <td>HANDLER</td>
+            <td>Function</td>
+            <td>
+              The event handler you want called when the event occurs.
+            </td>
+          </tr>
+        </table>
+        
+        <x-code-prism>
+        xtag.addEvent(myElement, 'tap:delegate(img)', function(event){
+          alert('An image element within myElement was just tapped');
+        });
+        </x-code-prism>
+        
+        <hr />
+        
+        <h2 id="api_xtag_addevents">xtag.addEvents(ELEMENT, OBJECT)</h2>
+        
+        <p>
+          Add multiple native, custom, or X-Tag library event listeners to an element using one function.
+          Pseudo chains are avaliable for use in your event object keys.
+        </p>
+        
+        <table>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ELEMENT</td>
+            <td>DOM element reference</td>
+            <td>
+              The element you would like to attach the event listeners to.
+            </td>
+          </tr>
+          <tr>
+            <td>OBJECT</td>
+            <td>Object</td>
+            <td>
+              An object composed of multiple events - keys are event names, and values are the event handlers.
+            </td>
+          </tr>
+        </table>
+        
+        <x-code-prism>
+        xtag.addEvents(myElement, {
+          'tap': function(event){
+            alert('myElement was just tapped');
+          },
+          'keypress:keypass(13)': function(event){
+            alert('The enter key was pressed, all other keys are blocked');
+          }
+        });
+        </x-code-prism>
+        
+        <h2 id="api_xtag_fireevent">xtag.fireEvent(ELEMENT, NAME, OPTIONS)</h2>
+        
+        <p>
+          Add a native, custom, or X-Tag library event listener to an element. The TYPE field also
+          accepts pseudo chains for even more powerful event handling.
+        </p>
+        
+        <table>
+          <tr>
+            <th>Argument</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>ELEMENT</td>
+            <td>DOM element reference</td>
+            <td>
+              The element you would like to attach an event listener to.
+            </td>
+          </tr>
+          <tr>
+            <td>NAME</td>
+            <td>String</td>
+            <td>
+              The event name you wish to fire on the target element.
+            </td>
+          </tr>
+          <tr>
+            <td>OPTIONS</td>
+            <td>Object</td>
+            <td>
+              The event options you want to use in firing your event. These include:
+              <ul bulleted>
+                <li><code>detail</code>: allows passage of custom data via the detail property of the event</li>
+                <li><code>bubbles</code>: specify whether the event bubbles - defaults to true</li>
+                <li><code>cancelable</code>: specify whether the event is cancelable - defaults to true</li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+        
+        <x-code-prism>
+        xtag.fireEvent(myElement, 'show', {
+          detail: {
+            x: 123,
+            y: 456
+          }
+        });
+        </x-code-prism>
 
     </section>
 

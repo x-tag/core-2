@@ -41,7 +41,7 @@ table code {
 /* CLASSES & ATTRIBUTES */
 
 [text-shadow], h2, h3  {
-  text-shadow: 0 3px 0.1em rgba(0,0,0,0.4);
+  text-shadow: 0 2px 0.1em rgba(0,0,0,0.3);
 }
 
 /* TARGETED ELEMENTS */
@@ -95,7 +95,7 @@ body {
 }
 
 body, input, select {
-  font-family: 'Telex', sans-serif;
+  font-family: 'Overpass', sans-serif;
   font-size: calc(0.8em + 0.4vmin);
 }
 
@@ -125,7 +125,8 @@ section {
   font-size: 0.9em;
   color: #ccc;
   line-height: 1.5em;
-  transition: opacity 0.5s ease;
+  overflow-y: hidden;
+  transition: opacity 0.3s ease-in-out;
 }
 
 hr {
@@ -134,7 +135,6 @@ hr {
   border-radius: 100%;
   opacity: 0.2;
 }
-
 
 h2 {
   font-size: 1.6em;
@@ -190,11 +190,11 @@ dd {
 }
 
 [font~="green"], dt {
-  color: #26905c;
+  color: #97c996;
 }
 
 [font~="blue"], h4 {
-  color: #0161a6;
+  color: #75b6e1;
 }
 
 .text-logo {
@@ -203,7 +203,6 @@ dd {
   padding: 0;
   color: rgba(255,255,255,0.5);
   font-family: 'Karla', sans-serif;
-  letter-spacing: -0.13em;
   font-size: 2.5em;
   line-height: 1em;
 }
@@ -211,6 +210,7 @@ dd {
 .text-logo b {
   position: relative;
   font-size: 0.90em;
+  margin: 0 -0.13em;
   color: #fff;
   vertical-align: bottom;   
   z-index: 1;
@@ -258,12 +258,13 @@ dd {
 
 .feature-row svg {
   display: block;
-  max-width: 65%;
+  width: 100%;
+  max-width: 1.25em;
+  padding: 0.1em;
   margin: 0 auto;
-  padding: 0.05em;
   font-size: 7em;
   stroke: #fff;
-  stroke-width: 0.2em;
+  stroke-width: 0.175em;
   fill: red;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -272,7 +273,7 @@ dd {
 }
 
 .feature-row li:nth-child(1) svg {
-  stroke-width: 0.095em;
+  stroke-width: 0.09em;
 }
 
 
@@ -303,7 +304,7 @@ dd {
   right: 0;
   z-index: 2;
   align-items: center;
-  background: #3598db;
+  background: #2f87c2;
   border-bottom: 1px solid #00487a;
   box-shadow: 0 1px 4px -1px rgba(0,0,0,0.5);
 }
@@ -368,9 +369,7 @@ dd {
 
 body[path=""] #home_section,
 body:not([path]) #home_section,
-body[path="/code"] #code_section,
-body[path="/working-groups"] #wg_section,
-body[path="/membership"] #membership_section {
+body[path="/docs"] #docs_section {
   position: relative;
   max-height: none;
   z-index: 1;
@@ -379,8 +378,7 @@ body[path="/membership"] #membership_section {
 
 body[path=""] #global_nav a[href="/"],
 body:not([path]) #global_nav a[href="/"],
-body[path="/membership"] #global_nav a[href="/membership"],
-body[path="/working-groups"] #global_nav a[href="/working-groups"] {
+body[path="/docs"] #global_nav a[href="/docs"] {
   cursor: default;
   background: none;
   border-bottom: 0.2em solid #fff;
@@ -395,6 +393,14 @@ body[path="/working-groups"] #global_nav a[href="/working-groups"] {
   font-size: 3.5em;
 }
 
+#home_logo:after {
+  content: "v" attr(data-version);
+  display: block;
+  font-size: 0.25em;
+  color: #888;
+  line-height: 0;
+}
+
 #home_descriptors {
   text-align: center;
   color: #888;
@@ -406,16 +412,25 @@ body[path="/working-groups"] #global_nav a[href="/working-groups"] {
   font-weight: bold;
 }
 
-#browser_support, #browser_support tr, #browser_support td {
+#browser_support {
+  display: flex;
+  flex-wrap: wrap;
   color: #ccc;
   text-align: left;
-  border: none;
-  background: none;
+}
+
+#browser_support > div {
+  width: 50%;
+  padding: 0.5em;
+  box-sizing: border-box;
 }
 
 #browser_support svg {
+  display: inline;
   min-width: 1em;
   font-size: 2em;
+  stroke: none;
+  vertical-align: middle;
 }
 
 #overview_demo > div {
