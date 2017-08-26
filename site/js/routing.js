@@ -9,7 +9,7 @@
 
   var removeTrailingSlash = /\/$/;
   function getPathname(anchor){
-    return (anchor || location).pathname.replace(removeTrailingSlash, '');
+    return (anchor || location).pathname.replace(removeTrailingSlash, '') || '/';
   }
 
   document.body.setAttribute('path', getPathname());

@@ -130,6 +130,7 @@ section {
 }
 
 hr {
+  height: 1px;
   margin: 4.5em auto 4em;
   border-color: #000 transparent #555;
   border-radius: 100%;
@@ -197,6 +198,10 @@ dd {
   color: #75b6e1;
 }
 
+pre[class*="language-"] { 
+  
+}
+
 .text-logo {
   position: relative;
   display: inline-block;
@@ -210,7 +215,7 @@ dd {
 .text-logo b {
   position: relative;
   font-size: 0.90em;
-  margin: 0 -0.13em;
+  margin: 0 -0.14em;
   color: #fff;
   vertical-align: bottom;   
   z-index: 1;
@@ -367,7 +372,7 @@ dd {
   margin: 0;
 }
 
-body[path=""] #home_section,
+body[path="/"] #home_section,
 body:not([path]) #home_section,
 body[path="/docs"] #docs_section {
   position: relative;
@@ -376,7 +381,7 @@ body[path="/docs"] #docs_section {
   opacity: 1;
 }
 
-body[path=""] #global_nav a[href="/"],
+body[path="/"] #global_nav a[href="/"],
 body:not([path]) #global_nav a[href="/"],
 body[path="/docs"] #global_nav a[href="/docs"] {
   cursor: default;
@@ -412,6 +417,22 @@ body[path="/docs"] #global_nav a[href="/docs"] {
   font-weight: bold;
 }
 
+#home_section x-clock {
+  display: table;
+  min-height: 1em;
+  margin: 0 auto 1em;
+  font-size: 2em;
+  line-height: 1em;
+  color: #aad4ef;
+  font-family: monospace;
+  cursor: pointer;
+}
+
+#home_section pre {
+  display: table;
+  margin: 0 auto;
+}
+
 #browser_support {
   display: flex;
   flex-wrap: wrap;
@@ -421,6 +442,7 @@ body[path="/docs"] #global_nav a[href="/docs"] {
 
 #browser_support > div {
   width: 50%;
+  min-width: 260px;
   padding: 0.5em;
   box-sizing: border-box;
 }

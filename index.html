@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" href="site/images/favicon.png?r2" />
   <link href='https://fonts.googleapis.com/css?family=Karla|Overpass' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="site/css/global.css" />
+  <link rel="stylesheet" href="site/css/prism.css" />
 </head>
 
 <body>
@@ -112,14 +113,40 @@
 
       <h2>What is X-Tag?</h2>
 
-      <p>X-Tag is a Microsoft supported, open source, JavaScript library that wraps the W3C standard <a href="http://jonrimmer.github.io/are-we-componentized-yet/">Web Components</a> family of APIs
-      to provide a compact, feature-rich interface for rapid component development. While X-Tag offers feature hooks for all Web Component APIs
-      (Custom Elements, Shadow DOM, Templates, and HTML Imports), it only requires Custom Element support to operate.
-      In the absence of native Custom Element support, X-Tag uses a set of <a target="_blank" href="https://github.com/webcomponents/webcomponentsjs">polyfills</a>
-      shared with Google's Polymer framework. You can view our package options in the <x-action event="viewchange" data-view="builds">Builds</x-action> section</p>
+      <p>X-Tag is a Microsoft supported, open source JavaScript library that wraps the W3C standard <a href="http://jonrimmer.github.io/are-we-componentized-yet/">Web Components</a> family of APIs
+      to provide a compact, feature-rich interface for component development. While X-Tag offers feature hooks for all Web Component APIs
+      (Custom Elements, Shadow DOM, Templates, and HTML Imports), it only relies on Custom Element support to operate.
+      In the absence of native Custom Element support, X-Tag uses a <a target="_blank" href="https://github.com/webcomponents/webcomponentsjs">polyfill</a>
+      shared with Google's Polymer framework. You can view our package options in the <a href="/builds">Builds</a> section</p>
 
 
       <hr/>
+
+      <x-clock></x-clock>
+
+<pre class="language-javascript"><code>
+xtag.create('x-clock', class extends XTagElement {
+  connectedCallback () {
+    this.start();
+  }
+  start (){
+    this.update();
+    this._data.interval = setInterval(() => this.update(), 1000);
+  }
+  stop (){
+    this._data.interval = clearInterval(this._data.interval);
+  }
+  update (){
+    this.textContent = new Date().toLocaleTimeString();
+  }
+  'tap::event' (){
+    if (this._data.interval) this.stop();
+    else this.start();
+  }
+});
+</code></pre>
+
+<hr/>
       
       <h2 text-shadow>Browser Support</h2>
       <div id="browser_support" class="feature-row">
@@ -161,632 +188,632 @@
     <section id="docs_section">
 
       
-        <h2 id="getting_started">Getting Started</h2>
-        
-                <h3>Registration - Where it All Begins</h3>
-        
-                  <p>
-                    The most important method in the X-Tag library is <code>xtag.register()</code>. The register function on the X-Tag object is what you'll use
-                    to create new custom element definitions, which can include things like lifecycle callbacks, attibute-linked getters/setters (accessors),
-                    and event listeners. Here's what defining a simple custom element looks like with X-Tag:
-                  </p>
-        
-        <x-code-prism>
-        xtag.register('x-frankenstein', {
-          lifecycle:{
-            created: function(){
-              alert("Look! It's moving. It's alive!");
-            }
-          }
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-        <h3>Content is King</h3>
-        
+<h2 id="getting_started">Getting Started</h2>
+
+        <h3>Registration - Where it All Begins</h3>
+
           <p>
-            For many of the components you create, you'll want to insert various elements into them for structure and presentation purposes. X-Tag provides some awesome features to help you with this.
-            The primary method for adding content to your component with X-Tag is the <code>content</code> property of your component registration defintion.
-            The <code>content</code> property accepts both a simple HTML string, or a comment string within a function to enable multiline HTML snippets. Below are examples
-            of what each variant looks like in practice.
+            The most important method in the X-Tag library is <code>xtag.register()</code>. The register function on the X-Tag object is what you'll use
+            to create new custom element definitions, which can include things like lifecycle callbacks, attibute-linked getters/setters (accessors),
+            and event listeners. Here's what defining a simple custom element looks like with X-Tag:
           </p>
-        
-        <h4>Simple string:</h4>
-        
-        <x-code-prism>
-        xtag.register('x-frankenstein', {
-          content: '‹h2›My name is Frank‹/h2›' +
-                   '‹span›I work for a mad scientist‹/span›'
-        });
-        </x-code-prism>
-        
-        <h4>Multi-line string:</h4>
-        
-        <x-code-prism>
-        xtag.register('x-frankenstein', {
-          content: function(){/*
-            ‹h2›My name is Frank‹/h2›
-            ‹span›I work for a mad scientist‹/span›
-          */}
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-                <h3>Meet the Lifecycle Callbacks</h3>
-        
-                  <p>
-                    There are four lifecycle callbacks you will rely on to develop your components.
-                    Here's an example of what each looks like when specified in an element definition:
-                  </p>
-        
-        <x-code-prism>
-        xtag.register('x-foo', {
-          lifecycle:{
-            created: function(){
-              alert('I fire when an ‹x-foo› is CREATED');
-            },
-            inserted: function(){
-              alert('I fire when an ‹x-foo› is INSERTED to the DOM');
-            },
-            removed: function(){
-              alert('I fire when an ‹x-foo› is REMOVED from the DOM');
-            },
-            attributeChanged: function(attrName, oldValue, newValue){
-              alert('I fire when an ATTRIBUTE is CHANGED on an ‹x-foo›');
-            }
-          }
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-                <h3>Adding Methods to the Mix</h3>
-        
-                  <p>
-                    Your custom elements will likely need some of their own, unique methods to provide the functionality you desire.
-                    X-Tag makes method addition a snap, just add a <code>methods</code> object to your top-level <code>xtag.register()</code> definition object
-                    and include your methods within it - here's what it looks like:
-                  </p>
-        
-        <x-code-prism>
-        xtag.register('x-shouter', {
-          lifecycle:{
-            created: function(){
-              this.shout('WHY AM I YELLING?');
-            }
-          },
-          methods: {
-            shout: function(message){
-              alert(message);
-            }
-          }
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-                <h3>Say Hello to Accessors</h3>
-        
-                  <p>
-                    X-Tag has built-in features to deal with attributes, setters, getters, and link them all together to provide a common interface.
-                    To use these features, you first add an <code>accessors</code> object to the top level of your <code>xtag.register()</code> definition object.
-                    Within this object you can add keys names that will be made available as getters/setters, as seen below. By adding the key <code>attribute</code>,
-                    to an accessor, it tells X-Tag to link the setter/getter with the corresponding HTML attribute of the same name. When attributes are linked to
-                    a getter/setter, their gets, sets, and state will remain in sync without having to write any additional code.
-                  </p>
-        
-                  <p>
-                    The `attribute` property of an accessor has a few options you can use to change behavior and perform advanced syncing to other parts of your component.
-                    Some of these advanced options include `boolean`, `property`, and `validate`, which are detailed in the examples below.
-                  </p>
-        
-        <x-code-prism>
-        xtag.register('x-foo', {
-          content: '‹input /›',
-          lifecycle:{
-            created: function(){
-              this.xtag.input = this.querySelector('input');
-            }
-          },
-          accessors: {
-            disabled: {
-              // The `attribute` property links node.bar gets/sets to the bar="" attribute
-              attribute: {
-                // Including the boolean property turns this into a boolean attribute/setter
-                boolean: true,
-                // The property field allows you reflect changes down to a cached node.
-                // Notice the input element is cached to the `input` property in `created`
-                property: 'input'
-              },
-              get: function(){
-                // do something when the getter is accessed
-              },
-              set: function(value){
-                // act on the value being passed to the setter
-              }
-            }
-          }
-        });
-        
-        xtag.register('x-bar', {
-          accessors: {
-            // X-Tag utomatically maps camelcased accessor setter names to their
-            // dashed attribute equivalents. In this example, `limitedCount` maps
-            // to the `limited-count` attribute.
-            limitedCount: {
-              attribute: {
-                // Allows you to validate values passed to your accessor
-                validate: function(val){
-                  return val < 10 ? val : 10;
-                }
-              },
-              get: function(val){
-                // do something when the getter is accessed
-              },
-              set: function(value){
-                // act on the value being passed to the setter
-              }
-            }
-          }
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-        <h3>The DL on Events</h3>
-        <p>
-          X-Tag provides an insanely powerful event system  you'll use often in developing your components.
-          We'll cover the basics here, and leave the more advanced features for a special tutorial dedicated to the topic.
-        </p>
-        
-        <p>
-          The first thing you'll need to do to attach events to your component is add an <code>events</code> object to the top level
-          of your <code>xtag.register()</code> definition object. The keys of this object are the names of the events you wish to attach to your custom element.
-          In the example below you'll see a familiar, native event name, <code>focus</code>, and a couple that X-Tag provides to make life easier:
-          <code>tap</code> and <code>move</code>. These are just two of the custom events X-Tag provides that unify, optimize, and simplify common event interactions
-          across platforms and devices. In the case of <code>tap</code> and <code>move</code>, X-Tag is unifying the mouse and touch equivalents of these events - have a look:
-        </p>
-        
-        <x-code-prism>
-        xtag.register('x-foo', {
-          events: {
-            focus: function(){
-              // perform an action when the user focuses something
-              // within your custom element.
-            },
-            tap: function(){
-              // perform an action when the user taps your custom
-              // element via a mouse click or touch input.
-            },
-            move: function(){
-              // perform an action when the user moves their
-              // mouse click or finger (touch) over your element
-            }
-          }
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-        <h3>Gettin' Jedi with Pseudos</h3>
-        
-        <p>
-          One advanced feature of X-Tag you should be aware of right off the bat is the <code>delegate</code> pseudo.
-          X-Tag features a function modifier system called <code>pseudos</code> which allows you to seamlessly wrap
-          functions anywhere in your custom element defintion object (lifecycle callbacks, methods, accessors, and events)
-          to extend their functionality. The <code>delegate</code> pseudo enables you to quickly add event delegation
-          (filtering of event targets based on CSS expressions) to any event function you add to your component. Here's an example:</p>
-        
-        <x-code-prism>
-        xtag.register('x-foo', {
-          content: '‹input/›',
-          events: {
-            'tap:delegate(input)': function(){
-              // Perform an action only when the user taps on an
-              // ‹input/› element within your component.
-            }
-          }
-        });
-        </x-code-prism>
-        
-        <h4>Create your own Pseudo:</h4>
-        
-        <p>
-          Once you create a pseudo and add it to the main xtag.pseudos object, as show below,
-          you can then use it on any key of your custom element defintion objects that has a
-          function as its value.
-        </p>
-        
-        <x-code-prism>
-        xtag.pseudos.example = {
-          onAdd: function(){
-            /*
-              This function is fired once when the base function is added to
-              the target object. For instance:
-        
-              If you added an event with xtag.addEvent(someNode, 'tap:example', fn),
-              the onAdd function of the 'example' pseudo would be fired once when
-              the event is first attached to the element 'someNode'.
-            */
-        
-          },
-          onRemove: function(){
-            /*
-              This is basically the opposite of the onAdd function above.
-              With onRemove, you can clean up whatever you may have done
-              in your onAdd or action function invocations.
-            */
-          },
-          action: function(pseudo, event) {
-            /*
-              This function is fired each time the pseudo chain is fired.
-              Pseudo actions are fired in the order they are chained, meaning
-              the in the pseudo 'toggle:log:example', the action function
-              for the 'log' pseudo would fire first, then the 'example' action
-              and finally the base function 'toggle' they are chained to.
-            */
-          }
-        };
-        </x-code-prism>
-        
-        <hr/>
-        
-        <h3>Inheritance</h3>
-        
-        <p>X-Tag uses the standard Custom Elements API for inheritance. 
-          Custom elements can inherit from standard DOM elements by using 
-          the <code>extends</code> property.
-         </p>
-        
-        <x-code-prism>
-        xtag.register('x-checkbox', {
-          extends: 'input',
-          lifecycle: {
-            created : function(){
-              this.type = "checkbox";
-            }
-          }
-        });
-        </x-code-prism>
-        
-        <p>To use the extended standard DOM element the <code>is</code> syntax is need.</p>
-        
-        <x-code-prism>
-        &lt;input is="x-checkbox"&gt; &lt;/input&gt; 
-        </x-code-prism>
-        
-        <h4>Extending custom elements:</h4>
-        
-        <p>
-            To extend custom elements, you need to use the 
-            the <code>prototype</code> property. Keep in mind that when any of the properties of the custom element is 
-            overwritten, it gets added to an execution queue. When accessed, the base property will be executed first
-            and then the rest of the queue will be accessed. For this cases the <code>is</code> syntax is
-            not needed.
-        </p>
-        
-        <x-code-prism>
-        var xSpan = xtag.register('x-span', {
-          content: '<span></span>',
-          methods: {
-            render() {
-              // some render logic
-            },
-          },
-        });
-        
-        xtag.register('x-money-span', {
-          prototype: xSpan.prototype,
-          methods: {
-            render: function() {
-                // xSpan render logic gets executed first
-                // x-money-span render logic is executed next
-            },
-          }
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-        <h1>API Reference</h1>
-        
-        <h2 id="api_xtag_register">xtag.register(NAME, DEFINITION)</h2>
-        
-        <p>
-          Define and register a new custom element. The example below shows test values for each of
-          the top-level definition objects.
-        </p>
-        
-        <table>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <td>NAME</td>
-            <td>String</td>
-            <td>The custom element's tag name <i>(must contain a dash)</i></td>
-          </tr>
-          <tr>
-            <td>DEFINITION</td>
-            <td>Object</td>
-            <td>An object containing the various features your custom element will utilize</td>
-          </tr>
-        </table>
-        
-        <x-code-prism>
-        xtag.register('x-foo', {
-          content: '‹input/›',
-          lifecycle:{
-            created: function(){},
-            inserted: function(){},
-            removed: function(){},
-            attributeChanged: function(){}
-          },
-          methods: {
-            someMethod: function(){}
-          },
-          accessors: {
-            someAccessor: {
-              // links to the 'some-accessor' attribute
-              attribute: {},
-              set: function(){},
-              get: function(){}
-            }
-          },
-          events: {
-            tap: function(){},
-            focus: function(){}
-          }
-        });
-        </x-code-prism>
-        
-        <hr/>
-        
-        <h2 id="api_xtag_query">xtag.query(ELEMENT, SELECTOR)</h2>
-        
-        <p>
-          Wrapper for querySelectorAll that always returns a true JavaScript Array. This is handly
-          for ensuring selections are easily iterable with standard JS Array functions, like
-          <code>forEach</code> and <code>map</code>.
-        </p>
-        
-        <table>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <td>ELEMENT</td>
-            <td>DOM element refrence</td>
-            <td>
-              A reference to the DOM element you wish to query
-            </td>
-          </tr>
-          <tr>
-            <td>SELECTOR</td>
-            <td>String</td>
-            <td>
-              The CSS selector you would like to query the element with
-            </td>
-          </tr>
-        </table>
-        
-        <x-code-prism>
-        var itemArray = xtag.query(document.body, 'ul li');
-        </x-code-prism>
-        
-        <hr />
-        
-        <h2 id="api_xtag_querychildren">xtag.queryChildren(ELEMENT, SELECTOR)</h2>
-        
-        <p>
-          Query only the direct children of an element with a provided selector.
-        </p>
-        
-        <table>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <td>ELEMENT</td>
-            <td>DOM element refrence</td>
-            <td>
-              A reference to the DOM element you wish to query.
-            </td>
-          </tr>
-          <tr>
-            <td>SELECTOR</td>
-            <td>String</td>
-            <td>
-              The CSS selector string you would like to test for matches against the element's direct children.
-            </td>
-          </tr>
-        </table>
-        
-        <x-code-prism>
-        var onlyChildButtons = xtag.queryChildren(myToolbar, 'button');
-        </x-code-prism>
-        
-        <hr />
-        
-        <h2 id="api_xtag_createfragment">xtag.createFragment(CONTENT)</h2>
-        
-        <p>
-          Generates a document fragment from a string, list of nodes, or a multi-line comment string.
-        </p>
-        
-        <table>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <td>CONTENT</td>
-            <td>
-              <ul bulleted>
-                <li>String</li>
-                <li>Multi-line function comment</li>
-              </ul>
-            </td>
-            <td>
-              Pass in a string or function with a multi-line comment string of HTML, and a Document Fragment will be created from the contents.
-            </td>
-          </tr>
-        </table>
-        
-        <x-code-prism>
-        var fragFromString = xtag.createFragment('‹div›Hello World!‹/div›');
-        
-        var fragFromFunction = xtag.createFragment(function(){/*
-          ‹header›Hello‹/header›
-          ‹section›I'm a multi-line HTML fragment‹/section›
-          ‹footer›Goodbye‹/footer›
-        */});
-        </x-code-prism>
-        
-        <hr />
-        
-        <h2 id="api_xtag_addevent">xtag.addEvent(ELEMENT, TYPE, HANDLER)</h2>
-        
-        <p>
-          Add a native, custom, or X-Tag library event listener to an element. The TYPE field also
-          accepts pseudo chains for even more powerful event handling.
-        </p>
-        
-        <table>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <td>ELEMENT</td>
-            <td>DOM element reference</td>
-            <td>
-              The element you would like to attach an event listener to.
-            </td>
-          </tr>
-          <tr>
-            <td>TYPE</td>
-            <td>String</td>
-            <td>
-              The event name, with any event pseudos you may want to chain.
-            </td>
-          </tr>
-          <tr>
-            <td>HANDLER</td>
-            <td>Function</td>
-            <td>
-              The event handler you want called when the event occurs.
-            </td>
-          </tr>
-        </table>
-        
-        <x-code-prism>
-        xtag.addEvent(myElement, 'tap:delegate(img)', function(event){
-          alert('An image element within myElement was just tapped');
-        });
-        </x-code-prism>
-        
-        <hr />
-        
-        <h2 id="api_xtag_addevents">xtag.addEvents(ELEMENT, OBJECT)</h2>
-        
-        <p>
-          Add multiple native, custom, or X-Tag library event listeners to an element using one function.
-          Pseudo chains are avaliable for use in your event object keys.
-        </p>
-        
-        <table>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <td>ELEMENT</td>
-            <td>DOM element reference</td>
-            <td>
-              The element you would like to attach the event listeners to.
-            </td>
-          </tr>
-          <tr>
-            <td>OBJECT</td>
-            <td>Object</td>
-            <td>
-              An object composed of multiple events - keys are event names, and values are the event handlers.
-            </td>
-          </tr>
-        </table>
-        
-        <x-code-prism>
-        xtag.addEvents(myElement, {
-          'tap': function(event){
-            alert('myElement was just tapped');
-          },
-          'keypress:keypass(13)': function(event){
-            alert('The enter key was pressed, all other keys are blocked');
-          }
-        });
-        </x-code-prism>
-        
-        <h2 id="api_xtag_fireevent">xtag.fireEvent(ELEMENT, NAME, OPTIONS)</h2>
-        
-        <p>
-          Add a native, custom, or X-Tag library event listener to an element. The TYPE field also
-          accepts pseudo chains for even more powerful event handling.
-        </p>
-        
-        <table>
-          <tr>
-            <th>Argument</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <td>ELEMENT</td>
-            <td>DOM element reference</td>
-            <td>
-              The element you would like to attach an event listener to.
-            </td>
-          </tr>
-          <tr>
-            <td>NAME</td>
-            <td>String</td>
-            <td>
-              The event name you wish to fire on the target element.
-            </td>
-          </tr>
-          <tr>
-            <td>OPTIONS</td>
-            <td>Object</td>
-            <td>
-              The event options you want to use in firing your event. These include:
-              <ul bulleted>
-                <li><code>detail</code>: allows passage of custom data via the detail property of the event</li>
-                <li><code>bubbles</code>: specify whether the event bubbles - defaults to true</li>
-                <li><code>cancelable</code>: specify whether the event is cancelable - defaults to true</li>
-              </ul>
-            </td>
-          </tr>
-        </table>
-        
-        <x-code-prism>
-        xtag.fireEvent(myElement, 'show', {
-          detail: {
-            x: 123,
-            y: 456
-          }
-        });
-        </x-code-prism>
+
+<pre class="language-javascript"><code>
+xtag.register('x-frankenstein', {
+  lifecycle:{
+    created: function(){
+      alert("Look! It's moving. It's alive!");
+    }
+  }
+});
+</code></pre>
+
+<hr/>
+
+<h3>Content is King</h3>
+
+  <p>
+    For many of the components you create, you'll want to insert various elements into them for structure and presentation purposes. X-Tag provides some awesome features to help you with this.
+    The primary method for adding content to your component with X-Tag is the <code>content</code> property of your component registration defintion.
+    The <code>content</code> property accepts both a simple HTML string, or a comment string within a function to enable multiline HTML snippets. Below are examples
+    of what each variant looks like in practice.
+  </p>
+
+<h4>Simple string:</h4>
+
+<pre class="language-javascript"><code>
+xtag.register('x-frankenstein', {
+  content: '‹h2›My name is Frank‹/h2›' +
+            '‹span›I work for a mad scientist‹/span›'
+});
+</code></pre>
+
+<h4>Multi-line string:</h4>
+
+<pre class="language-javascript"><code>
+xtag.register('x-frankenstein', {
+  content: function(){/*
+    ‹h2›My name is Frank‹/h2›
+    ‹span›I work for a mad scientist‹/span›
+  */}
+});
+</code></pre>
+
+<hr/>
+
+        <h3>Meet the Lifecycle Callbacks</h3>
+
+          <p>
+            There are four lifecycle callbacks you will rely on to develop your components.
+            Here's an example of what each looks like when specified in an element definition:
+          </p>
+
+<pre class="language-javascript"><code>
+xtag.register('x-foo', {
+  lifecycle:{
+    created: function(){
+      alert('I fire when an ‹x-foo› is CREATED');
+    },
+    inserted: function(){
+      alert('I fire when an ‹x-foo› is INSERTED to the DOM');
+    },
+    removed: function(){
+      alert('I fire when an ‹x-foo› is REMOVED from the DOM');
+    },
+    attributeChanged: function(attrName, oldValue, newValue){
+      alert('I fire when an ATTRIBUTE is CHANGED on an ‹x-foo›');
+    }
+  }
+});
+</code></pre>
+
+<hr/>
+
+        <h3>Adding Methods to the Mix</h3>
+
+          <p>
+            Your custom elements will likely need some of their own, unique methods to provide the functionality you desire.
+            X-Tag makes method addition a snap, just add a <code>methods</code> object to your top-level <code>xtag.register()</code> definition object
+            and include your methods within it - here's what it looks like:
+          </p>
+
+<pre class="language-javascript"><code>
+xtag.register('x-shouter', {
+  lifecycle:{
+    created: function(){
+      this.shout('WHY AM I YELLING?');
+    }
+  },
+  methods: {
+    shout: function(message){
+      alert(message);
+    }
+  }
+});
+</code></pre>
+
+<hr/>
+
+        <h3>Say Hello to Accessors</h3>
+
+          <p>
+            X-Tag has built-in features to deal with attributes, setters, getters, and link them all together to provide a common interface.
+            To use these features, you first add an <code>accessors</code> object to the top level of your <code>xtag.register()</code> definition object.
+            Within this object you can add keys names that will be made available as getters/setters, as seen below. By adding the key <code>attribute</code>,
+            to an accessor, it tells X-Tag to link the setter/getter with the corresponding HTML attribute of the same name. When attributes are linked to
+            a getter/setter, their gets, sets, and state will remain in sync without having to write any additional code.
+          </p>
+
+          <p>
+            The `attribute` property of an accessor has a few options you can use to change behavior and perform advanced syncing to other parts of your component.
+            Some of these advanced options include `boolean`, `property`, and `validate`, which are detailed in the examples below.
+          </p>
+
+<pre class="language-javascript"><code>
+xtag.register('x-foo', {
+  content: '‹input /›',
+  lifecycle:{
+    created: function(){
+      this.xtag.input = this.querySelector('input');
+    }
+  },
+  accessors: {
+    disabled: {
+      // The `attribute` property links node.bar gets/sets to the bar="" attribute
+      attribute: {
+        // Including the boolean property turns this into a boolean attribute/setter
+        boolean: true,
+        // The property field allows you reflect changes down to a cached node.
+        // Notice the input element is cached to the `input` property in `created`
+        property: 'input'
+      },
+      get: function(){
+        // do something when the getter is accessed
+      },
+      set: function(value){
+        // act on the value being passed to the setter
+      }
+    }
+  }
+});
+
+xtag.register('x-bar', {
+  accessors: {
+    // X-Tag utomatically maps camelcased accessor setter names to their
+    // dashed attribute equivalents. In this example, `limitedCount` maps
+    // to the `limited-count` attribute.
+    limitedCount: {
+      attribute: {
+        // Allows you to validate values passed to your accessor
+        validate: function(val){
+          return val < 10 ? val : 10;
+        }
+      },
+      get: function(val){
+        // do something when the getter is accessed
+      },
+      set: function(value){
+        // act on the value being passed to the setter
+      }
+    }
+  }
+});
+</code></pre>
+
+<hr/>
+
+<h3>The DL on Events</h3>
+<p>
+  X-Tag provides an insanely powerful event system  you'll use often in developing your components.
+  We'll cover the basics here, and leave the more advanced features for a special tutorial dedicated to the topic.
+</p>
+
+<p>
+  The first thing you'll need to do to attach events to your component is add an <code>events</code> object to the top level
+  of your <code>xtag.register()</code> definition object. The keys of this object are the names of the events you wish to attach to your custom element.
+  In the example below you'll see a familiar, native event name, <code>focus</code>, and a couple that X-Tag provides to make life easier:
+  <code>tap</code> and <code>move</code>. These are just two of the custom events X-Tag provides that unify, optimize, and simplify common event interactions
+  across platforms and devices. In the case of <code>tap</code> and <code>move</code>, X-Tag is unifying the mouse and touch equivalents of these events - have a look:
+</p>
+
+<pre class="language-javascript"><code>
+xtag.register('x-foo', {
+  events: {
+    focus: function(){
+      // perform an action when the user focuses something
+      // within your custom element.
+    },
+    tap: function(){
+      // perform an action when the user taps your custom
+      // element via a mouse click or touch input.
+    },
+    move: function(){
+      // perform an action when the user moves their
+      // mouse click or finger (touch) over your element
+    }
+  }
+});
+</code></pre>
+
+<hr/>
+
+<h3>Gettin' Jedi with Pseudos</h3>
+
+<p>
+  One advanced feature of X-Tag you should be aware of right off the bat is the <code>delegate</code> pseudo.
+  X-Tag features a function modifier system called <code>pseudos</code> which allows you to seamlessly wrap
+  functions anywhere in your custom element defintion object (lifecycle callbacks, methods, accessors, and events)
+  to extend their functionality. The <code>delegate</code> pseudo enables you to quickly add event delegation
+  (filtering of event targets based on CSS expressions) to any event function you add to your component. Here's an example:</p>
+
+<pre class="language-javascript"><code>
+xtag.register('x-foo', {
+  content: '‹input/›',
+  events: {
+    'tap:delegate(input)': function(){
+      // Perform an action only when the user taps on an
+      // ‹input/› element within your component.
+    }
+  }
+});
+</code></pre>
+
+<h4>Create your own Pseudo:</h4>
+
+<p>
+  Once you create a pseudo and add it to the main xtag.pseudos object, as show below,
+  you can then use it on any key of your custom element defintion objects that has a
+  function as its value.
+</p>
+
+<pre class="language-javascript"><code>
+xtag.pseudos.example = {
+  onAdd: function(){
+    /*
+      This function is fired once when the base function is added to
+      the target object. For instance:
+
+      If you added an event with xtag.addEvent(someNode, 'tap:example', fn),
+      the onAdd function of the 'example' pseudo would be fired once when
+      the event is first attached to the element 'someNode'.
+    */
+
+  },
+  onRemove: function(){
+    /*
+      This is basically the opposite of the onAdd function above.
+      With onRemove, you can clean up whatever you may have done
+      in your onAdd or action function invocations.
+    */
+  },
+  action: function(pseudo, event) {
+    /*
+      This function is fired each time the pseudo chain is fired.
+      Pseudo actions are fired in the order they are chained, meaning
+      the in the pseudo 'toggle:log:example', the action function
+      for the 'log' pseudo would fire first, then the 'example' action
+      and finally the base function 'toggle' they are chained to.
+    */
+  }
+};
+</code></pre>
+
+<hr/>
+
+<h3>Inheritance</h3>
+
+<p>X-Tag uses the standard Custom Elements API for inheritance. 
+  Custom elements can inherit from standard DOM elements by using 
+  the <code>extends</code> property.
+  </p>
+
+<pre class="language-javascript"><code>
+xtag.register('x-checkbox', {
+  extends: 'input',
+  lifecycle: {
+    created : function(){
+      this.type = "checkbox";
+    }
+  }
+});
+</code></pre>
+
+<p>To use the extended standard DOM element the <code>is</code> syntax is need.</p>
+
+<pre class="language-javascript"><code>
+&lt;input is="x-checkbox"&gt; &lt;/input&gt; 
+</code></pre>
+
+<h4>Extending custom elements:</h4>
+
+<p>
+    To extend custom elements, you need to use the 
+    the <code>prototype</code> property. Keep in mind that when any of the properties of the custom element is 
+    overwritten, it gets added to an execution queue. When accessed, the base property will be executed first
+    and then the rest of the queue will be accessed. For this cases the <code>is</code> syntax is
+    not needed.
+</p>
+
+<pre class="language-javascript"><code>
+var xSpan = xtag.register('x-span', {
+  content: '<span></span>',
+  methods: {
+    render() {
+      // some render logic
+    },
+  },
+});
+
+xtag.register('x-money-span', {
+  prototype: xSpan.prototype,
+  methods: {
+    render: function() {
+        // xSpan render logic gets executed first
+        // x-money-span render logic is executed next
+    },
+  }
+});
+</code></pre>
+
+<hr/>
+
+<h1>API Reference</h1>
+
+<h2 id="api_xtag_register">xtag.register(NAME, DEFINITION)</h2>
+
+<p>
+  Define and register a new custom element. The example below shows test values for each of
+  the top-level definition objects.
+</p>
+
+<table>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>NAME</td>
+    <td>String</td>
+    <td>The custom element's tag name <i>(must contain a dash)</i></td>
+  </tr>
+  <tr>
+    <td>DEFINITION</td>
+    <td>Object</td>
+    <td>An object containing the various features your custom element will utilize</td>
+  </tr>
+</table>
+
+<pre class="language-javascript"><code>
+xtag.register('x-foo', {
+  content: '‹input/›',
+  lifecycle:{
+    created: function(){},
+    inserted: function(){},
+    removed: function(){},
+    attributeChanged: function(){}
+  },
+  methods: {
+    someMethod: function(){}
+  },
+  accessors: {
+    someAccessor: {
+      // links to the 'some-accessor' attribute
+      attribute: {},
+      set: function(){},
+      get: function(){}
+    }
+  },
+  events: {
+    tap: function(){},
+    focus: function(){}
+  }
+});
+</code></pre>
+
+<hr/>
+
+<h2 id="api_xtag_query">xtag.query(ELEMENT, SELECTOR)</h2>
+
+<p>
+  Wrapper for querySelectorAll that always returns a true JavaScript Array. This is handly
+  for ensuring selections are easily iterable with standard JS Array functions, like
+  <code>forEach</code> and <code>map</code>.
+</p>
+
+<table>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>ELEMENT</td>
+    <td>DOM element refrence</td>
+    <td>
+      A reference to the DOM element you wish to query
+    </td>
+  </tr>
+  <tr>
+    <td>SELECTOR</td>
+    <td>String</td>
+    <td>
+      The CSS selector you would like to query the element with
+    </td>
+  </tr>
+</table>
+
+<pre class="language-javascript"><code>
+var itemArray = xtag.query(document.body, 'ul li');
+</code></pre>
+
+<hr />
+
+<h2 id="api_xtag_querychildren">xtag.queryChildren(ELEMENT, SELECTOR)</h2>
+
+<p>
+  Query only the direct children of an element with a provided selector.
+</p>
+
+<table>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>ELEMENT</td>
+    <td>DOM element refrence</td>
+    <td>
+      A reference to the DOM element you wish to query.
+    </td>
+  </tr>
+  <tr>
+    <td>SELECTOR</td>
+    <td>String</td>
+    <td>
+      The CSS selector string you would like to test for matches against the element's direct children.
+    </td>
+  </tr>
+</table>
+
+<pre class="language-javascript"><code>
+var onlyChildButtons = xtag.queryChildren(myToolbar, 'button');
+</code></pre>
+
+<hr />
+
+<h2 id="api_xtag_createfragment">xtag.createFragment(CONTENT)</h2>
+
+<p>
+  Generates a document fragment from a string, list of nodes, or a multi-line comment string.
+</p>
+
+<table>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>CONTENT</td>
+    <td>
+      <ul bulleted>
+        <li>String</li>
+        <li>Multi-line function comment</li>
+      </ul>
+    </td>
+    <td>
+      Pass in a string or function with a multi-line comment string of HTML, and a Document Fragment will be created from the contents.
+    </td>
+  </tr>
+</table>
+
+<pre class="language-javascript"><code>
+var fragFromString = xtag.createFragment('‹div›Hello World!‹/div›');
+
+var fragFromFunction = xtag.createFragment(function(){/*
+  ‹header›Hello‹/header›
+  ‹section›I'm a multi-line HTML fragment‹/section›
+  ‹footer›Goodbye‹/footer›
+*/});
+</code></pre>
+
+<hr />
+
+<h2 id="api_xtag_addevent">xtag.addEvent(ELEMENT, TYPE, HANDLER)</h2>
+
+<p>
+  Add a native, custom, or X-Tag library event listener to an element. The TYPE field also
+  accepts pseudo chains for even more powerful event handling.
+</p>
+
+<table>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>ELEMENT</td>
+    <td>DOM element reference</td>
+    <td>
+      The element you would like to attach an event listener to.
+    </td>
+  </tr>
+  <tr>
+    <td>TYPE</td>
+    <td>String</td>
+    <td>
+      The event name, with any event pseudos you may want to chain.
+    </td>
+  </tr>
+  <tr>
+    <td>HANDLER</td>
+    <td>Function</td>
+    <td>
+      The event handler you want called when the event occurs.
+    </td>
+  </tr>
+</table>
+
+<pre class="language-javascript"><code>
+xtag.addEvent(myElement, 'tap:delegate(img)', function(event){
+  alert('An image element within myElement was just tapped');
+});
+</code></pre>
+
+<hr />
+
+<h2 id="api_xtag_addevents">xtag.addEvents(ELEMENT, OBJECT)</h2>
+
+<p>
+  Add multiple native, custom, or X-Tag library event listeners to an element using one function.
+  Pseudo chains are avaliable for use in your event object keys.
+</p>
+
+<table>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>ELEMENT</td>
+    <td>DOM element reference</td>
+    <td>
+      The element you would like to attach the event listeners to.
+    </td>
+  </tr>
+  <tr>
+    <td>OBJECT</td>
+    <td>Object</td>
+    <td>
+      An object composed of multiple events - keys are event names, and values are the event handlers.
+    </td>
+  </tr>
+</table>
+
+<pre class="language-javascript"><code>
+xtag.addEvents(myElement, {
+  'tap': function(event){
+    alert('myElement was just tapped');
+  },
+  'keypress:keypass(13)': function(event){
+    alert('The enter key was pressed, all other keys are blocked');
+  }
+});
+</code></pre>
+
+<h2 id="api_xtag_fireevent">xtag.fireEvent(ELEMENT, NAME, OPTIONS)</h2>
+
+<p>
+  Add a native, custom, or X-Tag library event listener to an element. The TYPE field also
+  accepts pseudo chains for even more powerful event handling.
+</p>
+
+<table>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>ELEMENT</td>
+    <td>DOM element reference</td>
+    <td>
+      The element you would like to attach an event listener to.
+    </td>
+  </tr>
+  <tr>
+    <td>NAME</td>
+    <td>String</td>
+    <td>
+      The event name you wish to fire on the target element.
+    </td>
+  </tr>
+  <tr>
+    <td>OPTIONS</td>
+    <td>Object</td>
+    <td>
+      The event options you want to use in firing your event. These include:
+      <ul bulleted>
+        <li><code>detail</code>: allows passage of custom data via the detail property of the event</li>
+        <li><code>bubbles</code>: specify whether the event bubbles - defaults to true</li>
+        <li><code>cancelable</code>: specify whether the event is cancelable - defaults to true</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<pre class="language-javascript"><code>
+xtag.fireEvent(myElement, 'show', {
+  detail: {
+    x: 123,
+    y: 456
+  }
+});
+</code></pre>
 
     </section>
 
@@ -795,7 +822,13 @@
     <section id="membership_section" shadow-box></section>-->
   </main>
 
-<script src="site/js/global.js"></script>
+<script src="/lib/custom-elements.min.js"></script>
+<script src="/lib/pep.min.js"></script>
+<script src="/src/core.js"></script>
+<script src="/src/pointer-events.js"></script>
+<script src="/site/js/prism.js"></script>
+
+<script src="/site/js/global.js"></script>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
